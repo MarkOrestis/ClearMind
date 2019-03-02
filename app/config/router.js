@@ -1,5 +1,5 @@
-import React from 'react';
-import { createAppContainer, createStackNavigator } from 'react-navigation'; // Version can be specified in package.json
+
+import { createStackNavigator } from 'react-navigation'; // Version can be specified in package.json
 
 import WeatherScreen from '../screens/WeatherScreen';
 import NotificationsScreen from '../screens/NotificationsScreen';
