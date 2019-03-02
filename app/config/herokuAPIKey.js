@@ -1,1 +1,2 @@
-export const Heroku_AUTH_TOKEN = '2c13ab8c-dbe0-4786-8b97-984aa41f79f2';
+// this might be completely unnecessary and useless. just have here as a safeguard 
+export const Heroku_AUTH_TOKEN = 'isjNfGVnUmx5JswRpKWQScqOn4hJ2COX';
