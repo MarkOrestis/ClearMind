@@ -8,7 +8,7 @@ import { View, Text } from "react-native";
 var axiosInstance = axios.create({
     baseURL: 'https://clearmind-backend.herokuapp.com/',
     timeout: 1000,
-    headers: {'Authorization': Heroku_AUTH_TOKEN}
+    // headers: {'Authorization': Heroku_AUTH_TOKEN}
   });
 
 export default class AilmentsScreen extends Component {
