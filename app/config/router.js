@@ -1,6 +1,8 @@
+
 import React from 'react';
 import { createStackNavigator, createBottomTabNavigator, createAppContainer } from 'react-navigation';
 import { Icon } from 'react-native-vector-icons/MaterialCommunityIcons';
+
 import WeatherScreen from '../screens/WeatherScreen';
 import NotificationsScreen from '../screens/NotificationsScreen';
 import Ailments from '../screens/AilmentsScreen'
