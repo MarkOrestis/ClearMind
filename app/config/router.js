@@ -5,12 +5,14 @@ import { Icon } from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import WeatherScreen from '../screens/WeatherScreen';
 import NotificationsScreen from '../screens/NotificationsScreen';
-import Ailments from '../screens/AilmentsScreen'
+import Ailments from '../screens/AilmentsScreen';
+import EditSensitivities from '../screens/EditSensitivities';
+
 
 export const RootStack = createStackNavigator(
   {
-    Ailments: {
-        screen: Ailments,
+    EditSensitivities: {
+        screen: EditSensitivities,
     },
     Weather: {
       screen: WeatherScreen,
@@ -20,7 +22,7 @@ export const RootStack = createStackNavigator(
     }
   },
   {
-    initialRouteName: 'Ailments',
+    initialRouteName: 'EditSensitivities',
   }
 );
 
