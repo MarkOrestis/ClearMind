@@ -3,67 +3,39 @@ import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { Card, Divider } from 'react-native-elements';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Forecast from '../models/Forecast';
+
+const day1 = new Forecast("MON", "weather-cloudy", "0", "72°", "40°", 30, 87, 558, 25);
+const day2 = new Forecast("TUES", "weather-cloudy", "0", "68°", "45°", 9, 56, 450, 25);
+const day3 = new Forecast("WED", "weather-sunny", "0", "50°", "42°", 25, 56, 450, 25);
+const day4 = new Forecast("THURS", "weather-cloudy", "0", "64°", "48°", 25, 56, 450, 25);
+const day5 = new Forecast("FRI", "weather-rainy", "0", "55°", "46°", 25, 56, 450, 25);
+const fiveDay = [day1, day2, day3, day4, day5];
 
 export default class FiveDayForecast extends Component {
 
-    _onPressButton(day) {
-        Alert.alert('You tapped the day ' + day)
+    _onPressButton(myAlert) {
+        Alert.alert(myAlert);
       }
+
+    fiveDayView = fiveDay.map((fiveDayInfo, i) => {
+      return <TouchableOpacity key={i} onPress={() => this._onPressButton(fiveDayInfo.toString())}>
+      <View style={styles.column}>
+        <Text style={styles.notes}>{fiveDayInfo.day}</Text>
+        <Icon name={fiveDayInfo.type} size={40} color='white'></Icon>
+        <Text style={styles.notes}>{fiveDayInfo.highTemp}</Text>
+        <Text style={styles.lowTemp}>{fiveDayInfo.lowTemp}</Text>
+        <Icon name={fiveDayInfo.displayIcon(true)} size={40} color={fiveDayInfo.displayIcon(false)}></Icon>
+        </View>
+      </TouchableOpacity>
+    });  
 
     render() {
 
       return (
         <Card containerStyle={styles.card}>
           <View style={styles.viewStyle}>
-            <TouchableOpacity onPress={() => this._onPressButton('Monday')}>
-            <View style={styles.column}>
-              <Text style={styles.notes}>MON</Text>
-              <Icon name='weather-cloudy' size={40} color='white'></Icon>
-              <Text style={styles.notes}>{'72°'}</Text>
-              <Text style={styles.lowTemp}>{'40°'}</Text>
-              <Icon name='emoticon-happy-outline' size={40} color='black'></Icon>
-              </View>
-            </TouchableOpacity>
-            
-            <TouchableOpacity onPress={() => this._onPressButton('Tuesday')}>
-            <View style={styles.column}>
-              <Text style={styles.notes}>TUES</Text>
-              <Icon name='weather-cloudy' size={40} color='white'></Icon>
-              <Text style={styles.notes}>{'68°'}</Text>
-              <Text style={styles.lowTemp}>{'45°'}</Text>
-              <Icon name='alert' size={40} color='red'></Icon>
-            </View>  
-            </TouchableOpacity>
-            
-            <TouchableOpacity onPress={() => this._onPressButton('Wednesday')}>
-            <View style={styles.column}>
-              <Text style={styles.notes}>WED</Text>
-              <Icon name='weather-sunny' size={40} color='white'></Icon>
-              <Text style={styles.notes}>{'50°'}</Text>
-              <Text style={styles.lowTemp}>{'42°'}</Text>
-              <Icon name='emoticon-happy-outline' size={40} color='black'></Icon>
-            </View>  
-            </TouchableOpacity>
-            
-            <TouchableOpacity onPress={() => this._onPressButton('Thursday')}>
-            <View style={styles.column}>
-              <Text style={styles.notes}>THURS</Text>
-              <Icon name='weather-rainy' size={40} color='white'></Icon>
-              <Text style={styles.notes}>{'64°'}</Text>
-              <Text style={styles.lowTemp}>{'48°'}</Text>
-              <Icon name='emoticon-happy-outline' size={40} color='black'></Icon>
-            </View>  
-            </TouchableOpacity>
-            
-            <TouchableOpacity onPress={() => this._onPressButton('Friday')}>
-            <View style={styles.column}>
-              <Text style={styles.notes}>FRI</Text>
-              <Icon name='weather-cloudy' size={40} color='white'></Icon>
-              <Text style={styles.notes}>{'55°'}</Text>
-              <Text style={styles.lowTemp}>{'46°'}</Text>
-              <Icon name='emoticon-happy-outline' size={40} color='black'></Icon>
-            </View>  
-            </TouchableOpacity>
+            {this.fiveDayView}
             
           </View>
         </Card>
