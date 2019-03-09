@@ -1,14 +1,27 @@
 import React, { Component } from "react";
 import {
+    ImageBackground,
     View,
     Text,
     ScrollView,
-    Alert,
-    FlatList
 } from "react-native";
+
+// import {Item} from "native-base";
+import SwitchSelector from "react-native-switch-selector";
 import axios from 'axios';
 import Heroku_AUTH_TOKEN from "../config/herokuAPIKey";
-import { Rating, SwipeRatings } from 'react-native-ratings';
+
+const sensitivitiesScales = [
+    { label: "No Effect", value: "x", activeColor: '#228B44'},
+    { label: "Minor", value: "n", activeColor: '#4682B4'},
+    { label: "Moderate", value: "n", activeColor: '#FFA500'},
+    { label: "Intense", value: "g", activeColor: '#FF0000'}
+];
+
+headerTitleStyles = {color: '#000000',
+                    alignSelf: 'center',
+                    textAlign: 'center',
+                    flexGrow: 1};
 
 
 import {
@@ -79,22 +92,13 @@ export default class EditSensitivities extends Component {
         }).then(error => console.log(error));
     }
 
-    static navigationOptions = () => ({
-        headerStyle: {
-            backgroundColor: '#ffffff',
-            shadowRadius: 0,
-            borderBottomWidth: 0,
-        },
-        headerTintColor: '#FFFFFF',
-        headerTitleStyle: {
-            color: '#FFFFFF',
-        },
-        title: "header"
-    });
+    
 
-    pollenRating(rating) {
-        if (rating > 0) {
+    pollenRating(value) {
+        if (value != 0) {
             this.setState({pollen: true});
+        } else {
+            this.setState({pollen: false})
         }
     }
 
@@ -102,33 +106,24 @@ export default class EditSensitivities extends Component {
         this.setState({user: { ...this.state.user, pressure: rating}});
     }
 
-    renderHeader() {
-        // return(
-        //     <Header>
-        //         <Left>
-        //             <Button transparent onPress={ () => {this.props.navigation.goBack()}} >
-        //                 <Text>Close</Text>
-        //             </Button>
-        //         </Left>
-        //         <Body>
-        //         <Text>Sensitivities</Text>
-        //         </Body>
-        //         <Right>
-        //         </Right>
-        //     </Header>
-        // );
-    }
+    static navigationOptions = () => ({
+        title: "Sensitivities",
+        headerTransparent: true,
+        headerTitleStyle: headerTitleStyles
+    });
+
 
     render() {
         return(
-            <Container>
-                {/* {this.renderHeader()} */}
-                <Content>
-                    <ScrollView style={{padding: 10}}>
-                        {this.renderPage(this.state.page)}
-                    </ScrollView>
-                </Content>
-                {this.renderFooter(this.state.page)}
+            <Container>  
+                <ImageBackground source={this.state.page == 1 ? require('../res/images/Grass_Sunshine.jpg') : require('../res/images/blankWhite.jpg')} style={{height: '100%'}}>
+                    <Content>
+                        <ScrollView style={{padding: 10}}>
+                            {this.renderPage(this.state.page)}
+                        </ScrollView>
+                    </Content>
+                    {this.renderFooter(this.state.page)}
+                </ImageBackground>
             </Container>
         );
     }
@@ -137,164 +132,131 @@ export default class EditSensitivities extends Component {
         if (number == 1) {
             return (
                 <View style={{flex: 1, flexDirection:"column", justifyContent: "space-between", alignItems: "center"}}>
-                    <Text style={{fontSize: 20, fontWeight: "bold", textAlign: "center", margin:20}}>{"Welcome"}</Text>
-                    <Text style={{fontSize: 20, textAlign: "center", margin:20}}>{"Please enter your allergens and weather sensitivities"}</Text>
-                    <Text style={{fontSize: 20, textAlign: "left", marginTop:40, marginLeft: 20}}>{"0 Stars: no Effect"}</Text>
-                    <Text style={{fontSize: 20, textAlign: "left", margin:10, marginLeft:30}}>{"5 Stars: Heavily Effected"}</Text>
+                    <Text style={{fontSize: 45, fontWeight: "bold", textAlign: "center", margin:20, paddingTop: 60}}>{"ClearMind"}</Text>
+                    <Text style={{fontSize: 21, color:'#FFFFFF',textAlign: "center", margin:20, paddingTop: 40}}>{"Please help us by first entering your allergen and weather sensitivities"}</Text>
+                    {/* <Text style={{fontSize: 20, textAlign: "center", marginLeft: 20}}>{"This way, we can better predict days that might hold you back"}</Text> */}
+                    {/* <Text style={{fontSize: 20, textAlign: "center", margin:10, marginLeft:30}}>{"5 Stars: Heavily Effected"}</Text> */}
                 </View>
             );
         } else if (number == 2) {
             return (
-                <Form>
-                    <Item fixedLabel>
-                        <Label>Pressure differences</Label>
-                        <Rating
-                            type='star'
-                            // ratingImage={exclamationPoint}
-                            startingValue={0}
-                            // ratingColor={"#3498db"}
-                            ratingBackgroundColor='#3498db'
-                            ratingCount={5}
-                            imageSize={40}
-                            onFinishRating={this.ratingCompleted}
-                            showRating={false}
-                            style={{ paddingVertical: 10 }}
-                            />
-    
-                        {/* <Input placeholder='First name' style={{ textAlign: 'center' }} value='' onChangeText={(value) => {this.setState({user: { ...this.state.user, firstName: value}})}}/> */}
-                    </Item>
-
-                    <Item fixedLabel >
-                        <Label>Pollen</Label>
-                        <Rating
-                            type='star'
-                            // ratingImage={exclamationPoint}
-                            startingValue={0}
-                            // ratingColor={"#3498db"}
-                            // ratingBackgroundColor='#3498db'
-                            ratingCount={5}
-                            imageSize={40}
-                            onFinishRating={this.pollenRating}
-                            showRating={false}
-                            style={{ paddingVertical: 10 }}
+                <Container>
+                    <Item style={{paddingBottom:4, paddingTop: 75}}>
+                        <Text style={{fontWeight:'bold', fontSize: 16, paddingRight: 10}}> Pressure</Text>
+                        <SwitchSelector
+                            initial={0}
+                            onPress={() => {
+                                value => this.setState({ gender: value })
+                                this.pollenRating()
+                            }}
+                            textColor={'#000000'}
+                            selectedColor={'#FFFFFF'}
+                            height={30}
+                            width={275}
+                            options={sensitivitiesScales}
                             />
                     </Item>
 
-                    <Item fixedLabel >
-                        <Label>Grass</Label>
-                        <Rating
-                            type='star'
-                            // ratingImage={exclamationPoint}
-                            startingValue={0}
-                            // ratingColor={"#3498db"}
-                            ratingBackgroundColor='#3498db'
-                            ratingCount={5}
-                            imageSize={40}
-                            onFinishRating={this.ratingCompleted}
-                            showRating={false}
-                            style={{ paddingVertical: 10 }}
+                    <Item style={{padding: 4}}>
+                        <Text style={{fontWeight:'bold', fontSize: 16, paddingRight: 28 }}> Pollen</Text>
+                        <SwitchSelector
+                            initial={0}
+                            onPress={value => this.setState({ pollen: value })}
+                            textColor={'#000000'}
+                            selectedColor={'#FFFFFF'}
+                            height={30}
+                            width={275}
+                            options={sensitivitiesScales}
                             />
                     </Item>
 
-                    <Item fixedLabel >
-                        <Label>Tree</Label>
-                        <Rating
-                            type='star'
-                            // ratingImage={exclamationPoint}
-                            startingValue={0}
-                            // ratingColor={"#3498db"}
-                            ratingBackgroundColor='#3498db'
-                            ratingCount={5}
-                            imageSize={40}
-                            onFinishRating={this.ratingCompleted}
-                            showRating={false}
-                            style={{ paddingVertical: 10 }}
+                    <Item style={this.state.pollen ? {padding: 4} : { display: "none" }}>
+                        <Text style={{fontWeight:'bold', fontSize: 16, paddingRight: 31 }}> Grass</Text>
+                        <SwitchSelector
+                            initial={0}
+                            onPress={value => this.setState({ gender: value })}
+                            textColor={'#000000'}
+                            selectedColor={'#FFFFFF'}
+                            height={30}
+                            width={275}
+                            options={sensitivitiesScales}
                             />
                     </Item>
 
-                    <Item fixedLabel >
-                        <Label>Mold</Label>
-                        <Rating
-                            type='star'
-                            // ratingImage={exclamationPoint}
-                            startingValue={0}
-                            // ratingColor={"#3498db"}
-                            ratingBackgroundColor='#3498db'
-                            ratingCount={5}
-                            imageSize={40}
-                            onFinishRating={this.ratingCompleted}
-                            showRating={false}
-                            style={{ paddingVertical: 10 }}
+                    <Item style={this.state.pollen ? {padding: 4} : { display: "none" }}>
+                        <Text style={{fontWeight:'bold', fontSize: 16, paddingRight: 40 }}> Tree</Text>
+                        <SwitchSelector
+                            initial={0}
+                            onPress={value => this.setState({ gender: value })}
+                            textColor={'#000000'}
+                            selectedColor={'#FFFFFF'}
+                            height={30}
+                            width={275}
+                            options={sensitivitiesScales}
                             />
                     </Item>
 
-                    <Item fixedLabel>
-                        <Label>Weed</Label>
-                        <Rating
-                            type='star'
-                            // ratingImage={exclamationPoint}
-                            startingValue={0}
-                            // ratingColor={"#3498db"}
-                            ratingBackgroundColor='#3498db'
-                            ratingCount={5}
-                            imageSize={40}
-                            onFinishRating={this.ratingCompleted}
-                            showRating={false}
-                            style={{ paddingVertical: 10 }}
+                    <Item style={this.state.pollen ? {padding: 4} : { display: "none" }}>
+                        <Text style={{fontWeight:'bold', fontSize: 16, paddingRight: 36 }}> Mold</Text>
+                        <SwitchSelector
+                            initial={0}
+                            onPress={value => this.setState({ gender: value })}
+                            textColor={'#000000'}
+                            selectedColor={'#FFFFFF'}
+                            height={30}
+                            width={275}
+                            options={sensitivitiesScales}
                             />
                     </Item>
-                </Form>
-            ) 
+
+                    <Item style={this.state.pollen ? {padding: 4} : { display: "none" }}>
+                        <Text style={{fontWeight:'bold', fontSize: 16, paddingRight: 32 }}> Weed</Text>
+                        <SwitchSelector
+                            initial={0}
+                            onPress={value => this.setState({ gender: value })}
+                            textColor={'#000000'}
+                            selectedColor={'#FFFFFF'}
+                            height={30}
+                            width={275}
+                            options={sensitivitiesScales}
+                            />
+                    </Item>
+                </Container>
+            )
+                
         } 
     }
 
     renderFooter(number) {
         if (number == 1) {
             return (
-                <Footer>
+                <Footer style={{backgroundColor: 'transparent'}}>
                     <Left />
                     <Body />
                     <Right>
                         <Button transparent onPress={ () => {this.setState({page: this.state.page + 1})}}>
-                            <Text style={{marginRight: 10}}>next</Text>
+                            <Text style={{marginRight: 10, fontWeight:'bold', fontSize: 16, color: '#FFFFFF'}}>next</Text>
                         </Button>
                     </Right>
                 </Footer>
             );
-        }
-        //  else if (number == 2 && this.state.pollen) {
-        //     return (
-        //         <Footer>
-        //             <Left>
-        //                 <Button transparent onPress={ () => {this.setState({page: this.state.page - 1})}}>
-        //                     <Text style={{marginLeft: 10}}>previous</Text>
-        //                 </Button>
-        //             </Left>
-        //             <Body />
-        //             <Right>
-        //                 <Button transparent onPress={ () => {this.setState({page: this.state.page + 1})}}>
-        //                     <Text style={{marginRight: 10}}>next</Text>
-        //                 </Button>
-        //             </Right>
-        //         </Footer>
-        //     );
-        // } 
-        else 
+        } else {
             return (
-                <Footer>
+                <Footer style={{backgroundColor: '#FFFFFF'}}>
                     <Left>
                         <Button transparent onPress={ () => {this.setState({page: this.state.page - 1})}}>
-                            <Text style={{marginLeft: 10}}>previous</Text>
+                            <Text style={{marginLeft: 10, fontWeight:'bold', fontSize: 16}}>previous</Text>
                         </Button>
                     </Left>
                     <Body />
                     <Right>
                     <Button transparent onPress={ () => this.props.navigation.navigate('Weather')}>
-                            <Text style={{marginRight: 10}}>next</Text>
+                            <Text style={{marginRight: 10, fontWeight:'bold', fontSize: 16}}>next</Text>
                         </Button>
                     </Right>
                 </Footer>
             );
+        }
     }
 
     // renderButton(checked, signature) {
