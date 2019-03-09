@@ -4,11 +4,13 @@ import {
     View,
     Text,
     ScrollView,
+    Input,
+    InputGroup
 } from "react-native";
 
 // import {Item} from "native-base";
 import SwitchSelector from "react-native-switch-selector";
-import axios from 'axios';
+// import axios from 'axios';
 import Heroku_AUTH_TOKEN from "../config/herokuAPIKey";
 
 const sensitivitiesScales = [
@@ -43,11 +45,11 @@ import {
 
 import User from "../models/User";
 
-var axiosInstance = axios.create({
-    baseURL: 'https://clearmind-backend.herokuapp.com',
-    timeout: 1000,
-    headers: {'Authorization': Heroku_AUTH_TOKEN}
-});
+// var axiosInstance = axios.create({
+//     baseURL: 'https://clearmind-backend.herokuapp.com',
+//     timeout: 1000,
+//     headers: {'Authorization': Heroku_AUTH_TOKEN}
+// });
 
 export default class EditSensitivities extends Component {
     constructor(props) {
@@ -71,7 +73,10 @@ export default class EditSensitivities extends Component {
             lat = position.coords.latitude;
             lon = position.coords.longitude;
     
-            // this.sendCurrentLocation(position.coords.latitude, position.coords.longitude);
+            this.sendCurrentLocation(position.coords.latitude, position.coords.longitude);
+            console.log("lat: " + lat);
+            console.log("lon: " + lon);
+            
           },
           error => {
             this.setState({
@@ -82,14 +87,36 @@ export default class EditSensitivities extends Component {
     }
     
     sendCurrentLocation(lat, lon) {
-        axiosInstance({
-            method: 'get',
-            url: '/api/locationKey',
-            data: {
-                latitude: lat,
-                longitude: lon
+        fetch(
+            `https://clearmind-backend.herokuapp.com/api/users`, {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: 'jonny bravo',
+                    password: 'eatme',
+                    lat: lat,
+                    lon: lon
+                })
             }
-        }).then(error => console.log(error));
+          )
+        //   .then(res => res.json())
+        //   .then(json => {
+        //     console.log(lat);
+        //     console.log(lon);
+        //     console.log(json);
+        //     this.setState({
+        //       lat: json.main.lat,
+        //       weatherCondition: json.weather[0].main,
+        //       isLoading: false
+        //     });
+        //   })
+          .catch(function(error) {
+            console.log('There has been a problem with your fetch operation: ' + error.message);
+            throw error;
+          });
     }
 
     
