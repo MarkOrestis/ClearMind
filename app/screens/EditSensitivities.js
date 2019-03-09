@@ -147,7 +147,7 @@ export default class EditSensitivities extends Component {
                             initial={0}
                             onPress={() => {
                                 value => this.setState({ gender: value })
-                                this.pollenRating()
+                                // this.pollenRating()
                             }}
                             textColor={'#000000'}
                             selectedColor={'#FFFFFF'}
