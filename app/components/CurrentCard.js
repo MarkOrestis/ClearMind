@@ -14,20 +14,15 @@ export default class CurrentCard extends Component {
           location: '',
           forecast: {},
       };
-
-       
-      
-      this.state.forecast = new Forecast("MON", "weather-cloudy", "72°", "72°", "40°", 30, 87, 558, 25);
-      this.state.location = "Atlanta, GA";
       
     }
 
-    // componentDidMount() {
-    //   this.setState({
-    //       location: this.props.location,
-    //       forecast: this.props.forecast
-    //   });
-    // };
+    componentDidMount() {
+      this.setState({
+          location: this.props.location,
+          forecast: this.props.forecast
+      });
+    };
 
     _onPressButton(myAlert) {
       Alert.alert(myAlert);
@@ -45,9 +40,14 @@ export default class CurrentCard extends Component {
       const alert = <TouchableOpacity onPress={() => this._onPressButton(this.state.forecast.toString())}>
           <Icon name='alert' size={20} color='red'></Icon>
         </TouchableOpacity>;
-      if (this.state.forecast.alertFor() == 'pollen') {
+      // if (this.state.forecast.alertFor == 'pollen') {
+      //   icons[2] = alert;
+      // } else if (this.state.forecast.alertFor == 'pressure') {
+      //   icons[1] = alert;
+      // }
+      if (this.state.forecast.pollen > 550) {
         icons[2] = alert;
-      } else if (this.state.forecast.alertFor() == 'pressure') {
+      } else if (this.state.forecast.pressure < 10) {
         icons[1] = alert;
       }
 

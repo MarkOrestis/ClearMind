@@ -11,6 +11,7 @@ export default class Forecast {
        this.humidity = humidity;
        this.pollen = pollen;
        this.rain = rain;
+       this.alertFor = this.alertFor.bind(this);
     }
 
     alertFor() {
