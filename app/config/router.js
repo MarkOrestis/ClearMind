@@ -7,10 +7,14 @@ import WeatherScreen from '../screens/WeatherScreen';
 import NotificationsScreen from '../screens/NotificationsScreen';
 import Ailments from '../screens/AilmentsScreen';
 import EditSensitivities from '../screens/EditSensitivities';
+import LoginScreen from '../screens/Login';
 
 
 export const RootStack = createStackNavigator(
   {
+    LoginScreen: {
+        screen: LoginScreen,
+    },
     EditSensitivities: {
         screen: EditSensitivities,
     },
@@ -22,7 +26,7 @@ export const RootStack = createStackNavigator(
     }
   },
   {
-    initialRouteName: 'EditSensitivities',
+    initialRouteName: 'LoginScreen',
   }
 );
 
