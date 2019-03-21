@@ -7,29 +7,34 @@ import CurrentCard from '../components/CurrentCard';
 import FiveDayForecast from "../components/FiveDayForecast";
 import { BorderlessButton } from "react-native-gesture-handler";
 import Forecast from '../models/Forecast';
+import {styles} from '../config/styles/styles'
 
 export default class WeatherScreen extends Component {
 
-    static navigationOptions = {
+    static navigationOptions = ({navigation, screenProps}) => ({
       title: 'Weather Conditions',
-    };
+      headerTransparent: true,
+      headerTitleStyle: styles.headerTitleStyles,
+      headerRight: <Icon name="settings" size={28} style={{paddingRight: 20}} onPress={() => {navigation.navigate('Settings');}} />,
+
+    });
 
     render() {
       
       const myForecast = new Forecast("MON", "weather-cloudy", "72°", "72°", "40°", 30, 87, 558, 25);
 
       return (
-        <View>
-          <CurrentCard></CurrentCard> 
-          <View style={styles.viewStyle}>
-            <Text style={styles.details}>Select a day to see details.</Text>
+        <View style={{paddingTop: 80}}>
+          <CurrentCard/>
+          <View style={styles.weatherViewStyle}>
+            <Text style={styles.weatherDetails}>Select a day to see details.</Text>
           </View>
           <FiveDayForecast></FiveDayForecast>
           <View style={{flexDirection:'row', alignItems: 'center', justifyContent: 'center'}}>
-              <Icon name='settings' size={24} onPress={() => this.props.navigation.navigate('Notifications')}></Icon>
+              <Icon name='settings' size={24} onPress={() => this.props.navigation.navigate('Settings')}></Icon>
               <Button 
                 title="Notification Settings"
-                onPress={() => this.props.navigation.navigate('Notifications')}
+                onPress={() => this.props.navigation.navigate('Settings')}
               /> 
             </View>
         </View>
@@ -37,17 +42,3 @@ export default class WeatherScreen extends Component {
     }
 
 }
-
-const styles = StyleSheet.create({
-  details: {
-      fontSize: 18,
-      fontWeight: 'bold',
-  },
-  viewStyle: {
-      flexDirection: 'column',
-      justifyContent: 'center',
-      alignItems: 'center',
-      marginTop: 25,
-      marginBottom: 0,
-  },
-});

@@ -8,10 +8,7 @@ import {
     InputGroup
 } from "react-native";
 
-// import {Item} from "native-base";
 import SwitchSelector from "react-native-switch-selector";
-// import axios from 'axios';
-import Heroku_AUTH_TOKEN from "../config/herokuAPIKey";
 
 const sensitivitiesScales = [
     { label: "No Effect", value: "x", activeColor: '#228B44'},
@@ -29,15 +26,10 @@ headerTitleStyles = {color: '#000000',
 import {
     Container,
     Item,
+    Button,
 } from 'native-base'
 
 import User from "../models/User";
-
-// var axiosInstance = axios.create({
-//     baseURL: 'https://clearmind-backend.herokuapp.com',
-//     timeout: 1000,
-//     headers: {'Authorization': Heroku_AUTH_TOKEN}
-// });
 
 export default class EditSensitivities extends Component {
     constructor(props) {
@@ -96,7 +88,6 @@ export default class EditSensitivities extends Component {
           });
     }
 
-    
 
     pollenRating(value) {
         if (value != 0) {
@@ -200,6 +191,10 @@ export default class EditSensitivities extends Component {
                         options={sensitivitiesScales}
                         />
                 </Item>
+
+                <Button block style={{marginTop:10, backgroundColor: 'transparent'}} onPress={() => this.props.navigation.navigate("Weather")}>
+                    <Text style={{color: '#000000', fontSize:20, backgroundColor: 'transparent'}}> Save </Text>
+                </Button>
             </Container>
         )
 

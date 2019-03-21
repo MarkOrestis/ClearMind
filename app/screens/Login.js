@@ -28,10 +28,10 @@ export default class Login extends Component {
         password: '',
       }
       
-      // For when we have persistence
+      // For when we have user persistence
       // Authenticator.userIsLoggedIn((result) => {
       //     if (result) {
-      //         this.props.navigation.navigate("Home");
+      //         this.props.navigation.navigate("WeatherScreen");
       //     }
       // });
      }
@@ -72,14 +72,14 @@ export default class Login extends Component {
       return (
         <Container>  
           <ImageBackground source={require('../res/images/Grass_Sunshine.jpg')} style={{height: '100%'}}>
-            <Content contentContainerStyle={{flex:1, flexDirection: "column", justifyContent: "space-between", alignItems:"center",paddingLeft: 10,paddingRight: 10,}}>
+            <Content contentContainerStyle={styles.contentContainerStyle}>
               <View style={{alignSelf: "stretch", top: 60}}>
-              <Text style={{fontSize: 45, fontWeight: "bold", textAlign: "center", margin:20, paddingBottom: 120}}>{"ClearMind"}</Text>
+              <Text style={styles.loginTitle}>{"ClearMind"}</Text>
 
               <InputGroup>
-                <Icon name="mail" style={colorStyles.primaryText} />
+                <Icon name="person" style={colorStyles.primaryText} />
                 <Input
-                  placeholder='email'
+                  placeholder='username'
                   placeholderTextColor={colorPalette.primaryText}
                   autoCapitalize="none"
                   autoCorrect={false}
