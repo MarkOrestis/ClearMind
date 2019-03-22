@@ -1,12 +1,5 @@
 import React, { Component } from "react";
-import {
-    ImageBackground,
-    View,
-    Text,
-    ScrollView,
-    Input,
-    InputGroup
-} from "react-native";
+import { Text } from "react-native";
 
 import SwitchSelector from "react-native-switch-selector";
 
@@ -15,6 +8,11 @@ const sensitivitiesScales = [
     { label: "Minor", value: "n", activeColor: '#4682B4'},
     { label: "Moderate", value: "n", activeColor: '#FFA500'},
     { label: "Intense", value: "g", activeColor: '#FF0000'}
+];
+
+const pollenScales = [
+    { label: "No Effect", value: "x", activeColor: '#228B44'},
+    { label: "Affects Me", value: "g", activeColor: '#FF0000'}
 ];
 
 headerTitleStyles = {color: '#000000',
@@ -117,7 +115,21 @@ export default class EditSensitivities extends Component {
                         initial={0}
                         onPress={() => {
                             value => this.setState({ gender: value })
-                            // this.pollenRating()
+                        }}
+                        textColor={'#000000'}
+                        selectedColor={'#FFFFFF'}
+                        height={26}
+                        width={275}
+                        options={sensitivitiesScales}
+                        />
+                </Item>
+
+                <Item style={{padding:4}}>
+                    <Text style={{fontWeight:'bold', fontSize: 16, paddingRight: 36}}> Light</Text>
+                    <SwitchSelector
+                        initial={0}
+                        onPress={() => {
+                            value => this.setState({ gender: value })
                         }}
                         textColor={'#000000'}
                         selectedColor={'#FFFFFF'}
@@ -136,7 +148,7 @@ export default class EditSensitivities extends Component {
                         selectedColor={'#FFFFFF'}
                         height={30}
                         width={275}
-                        options={sensitivitiesScales}
+                        options={pollenScales}
                         />
                 </Item>
 
@@ -192,8 +204,8 @@ export default class EditSensitivities extends Component {
                         />
                 </Item>
 
-                <Button block style={{marginTop:10, backgroundColor: 'transparent'}} onPress={() => this.props.navigation.navigate("Weather")}>
-                    <Text style={{color: '#000000', fontSize:20, backgroundColor: 'transparent'}}> Save </Text>
+                <Button block bordered small style={{marginTop: 10, marginLeft: 150, marginRight: 150,backgroundColor: 'transparent', borderColor: '#000000'}} onPress={() => this.props.navigation.navigate("Weather")}>
+                    <Text style={{color: '#000000', fontSize:16, backgroundColor: 'transparent'}}> Save </Text>
                 </Button>
             </Container>
         )
