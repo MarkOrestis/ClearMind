@@ -32,7 +32,42 @@ export const RootStack = createStackNavigator(
     initialRouteName: 'LoginScreen',
   }
 );
+//sample code that shows logic for using token to persist
+// constructor() {
+//     super();
+//     this.state = { hasToken: false, isLoaded: false };
+//   }
 
+//   componentDidMount() {
+//     AsyncStorage.getItem('id_token').then((token) => {
+//       this.setState({ hasToken: token !== null, isLoaded: true })
+//     });
+//   }
+
+//   render() {
+//     if (!this.state.isLoaded) {
+//       return (
+//         <ActivityIndicator />  //simple loading widget
+//       )
+//     } else {
+//       return(
+//         <Router>
+//           <Scene key='root'>
+//             <Scene
+//               component={Authentication}
+//               initial={!this.state.hasToken}  //sends user to this when no token i think
+//               (...)
+//             />
+//             <Scene
+//               component={HomePage}
+//               initial={this.state.hasToken}  //sends user to this when token i think
+//               (...)
+//             />
+//             </Scene>
+//         </Router>
+//       )
+//     }
+//   }
 // I (Mary) tried to add a bottomtabnavigator but kept getting errors
 
 // const WeatherStack = createStackNavigator({
