@@ -14,20 +14,15 @@ export default class CurrentCard extends Component {
           location: '',
           forecast: {},
       };
-
-       
-      
-      this.state.forecast = new Forecast("MON", "weather-cloudy", "72°", "72°", "40°", 30, 87, 558, 25);
-      this.state.location = "Atlanta, GA";
       
     }
 
-    // componentDidMount() {
-    //   this.setState({
-    //       location: this.props.location,
-    //       forecast: this.props.forecast
-    //   });
-    // };
+    componentDidMount() {
+      this.setState({
+          location: this.props.location,
+          forecast: this.props.forecast
+      });
+    };
 
     _onPressButton(myAlert) {
       Alert.alert(myAlert);
@@ -45,9 +40,14 @@ export default class CurrentCard extends Component {
       const alert = <TouchableOpacity onPress={() => this._onPressButton(this.state.forecast.toString())}>
           <Icon name='alert' size={20} color='red'></Icon>
         </TouchableOpacity>;
-      if (this.state.forecast.alertFor() == 'pollen') {
+      // if (this.state.forecast.alertFor == 'pollen') {
+      //   icons[2] = alert;
+      // } else if (this.state.forecast.alertFor == 'pressure') {
+      //   icons[1] = alert;
+      // }
+      if (this.state.forecast.pollen > 550) {
         icons[2] = alert;
-      } else if (this.state.forecast.alertFor() == 'pressure') {
+      } else if (this.state.forecast.pressure < 10) {
         icons[1] = alert;
       }
 
@@ -59,7 +59,7 @@ export default class CurrentCard extends Component {
               <Text style={styles.location}>{this.state.location}</Text>
             </View>
             <View style={{flexDirection:'row', marginVertical: 20, width:110, justifyContent: 'space-between'}}>
-              <Text style={styles.temperature}>{this.state.forecast.currTemp}</Text>
+              <Text style={styles.temperature}>{this.state.forecast.currTemp + '°'}</Text>
               <Icon name={this.state.forecast.type} size={50} color='white'></Icon>
             </View>
           </View>
@@ -67,13 +67,13 @@ export default class CurrentCard extends Component {
           <Divider style={{ backgroundColor: '#dfe6e9', marginTop:6, marginBottom:2}} />
           
           <View style={{flexDirection:'row', justifyContent:'space-between'}}>
-            <Text style={styles.notesHeaders}>CHANCE OF RAIN</Text>
+            <Text style={styles.notesHeaders}>HUMIDITY</Text>
             <Text style={styles.notesHeaders}>PRESSURE</Text>
           </View>
 
           <View style={{flexDirection:'row', justifyContent:'space-between'}}>
             <View style={{flexDirection:'row'}}>
-              <Text style={styles.notes}>{this.state.forecast.rain + '%'}</Text>
+              <Text style={styles.notes}>{this.state.forecast.humidity + '%'}</Text>
               {icons[0]}
             </View>
             <View style={{flexDirection:'row'}}>
@@ -85,18 +85,37 @@ export default class CurrentCard extends Component {
           <Divider style={{ backgroundColor: '#dfe6e9', marginTop:6, marginBottom:2}} />
           
           <View style={{flexDirection:'row', justifyContent:'space-between'}}>
-            <Text style={styles.notesHeaders}>POLLEN COUNT</Text>
-            <Text style={styles.notesHeaders}>HUMIDITY</Text>
+            <Text style={styles.notesHeaders}>GRASS POLLEN</Text>
+            <Text style={styles.notesHeaders}>TREE POLLEN</Text>
           </View>
 
           <View style={{flexDirection:'row', justifyContent:'space-between'}}>
             <View style={{flexDirection:'row'}}>
-              <Text style={styles.notes}>{this.state.forecast.pollen}</Text>
+              <Text style={styles.notes}>{this.state.forecast.grass}</Text>
               {icons[2]}
             </View>
             <View style={{flexDirection:'row'}}>
               {icons[3]}
-              <Text style={styles.notes}>{this.state.forecast.humidity + '%'}</Text>
+              <Text style={styles.notes}>{this.state.forecast.tree}</Text>
+            </View>
+            
+          </View>
+
+          <Divider style={{ backgroundColor: '#dfe6e9', marginTop:6, marginBottom:2}} />
+          
+          <View style={{flexDirection:'row', justifyContent:'space-between'}}>
+            <Text style={styles.notesHeaders}>MOLD POLLEN</Text>
+            <Text style={styles.notesHeaders}>RAGWEED POLLEN</Text>
+          </View>
+
+          <View style={{flexDirection:'row', justifyContent:'space-between'}}>
+            <View style={{flexDirection:'row'}}>
+              <Text style={styles.notes}>{this.state.forecast.mold}</Text>
+              {icons[2]}
+            </View>
+            <View style={{flexDirection:'row'}}>
+              {icons[3]}
+              <Text style={styles.notes}>{this.state.forecast.ragweed}</Text>
             </View>
             
           </View>

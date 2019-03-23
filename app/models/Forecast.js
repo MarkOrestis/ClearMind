@@ -1,22 +1,39 @@
 //import React, { Component } from "react";
 
 export default class Forecast {
-    constructor(day, type, currTemp, highTemp, lowTemp, pressure, humidity, pollen, rain) {
-       this.day = day;
-       this.type = type; 
+    constructor(day, type, currTemp, highTemp, lowTemp, pressure, humidity, mold, ragweed, grass, tree) {
+       this.day = day ? day.toString().substring(5, 10) : ""; //type ? type.toString() : ""
+       this.type = this.typeToIcon(type); 
        this.currTemp = currTemp;
        this.highTemp = highTemp;
        this.lowTemp = lowTemp;
        this.pressure = pressure;
        this.humidity = humidity;
-       this.pollen = pollen;
-       this.rain = rain;
+       this.mold = mold;
+       this.ragweed = ragweed;
+       this.grass = grass;
+       this.tree = tree;
+       this.alertFor = this.alertFor.bind(this);
+    }
+
+    typeToIcon(myType) {
+        if (myType == "Sunny") {
+            return "weather-sunny";
+        } else if (myType == "Cloudy") {
+            return "weather-cloudy";
+        } else if (myType == "Mostly sunny" || myType == "Mostly cloudy") {
+            return "weather-partlycloudy";
+        } else if (myType == "Thunderstorms") {
+            return "weather-lightning";
+        } else {
+            return "weather-cloudy";
+        }
     }
 
     alertFor() {
         //Returns whichever weather condition warrants an alert based on algorithm
         //For now, returns pollen over 550 or pressure under 10 hPa
-        if (this.pollen > 550) {
+        if (this.tree > 550) {
             return "pollen";
         } else if (this.pressure < 10) {
             return "pressure";
@@ -27,7 +44,7 @@ export default class Forecast {
 
     toString() {
         if (this.alertFor() == "pollen") {
-            return "Hazard day for allergies \nwith pollen counts of " + this.pollen + ".";
+            return "Hazard day for allergies \nwith pollen counts of " + this.tree + ".";
         } else if (this.alertFor() == "pressure") {
             return "Hazard day for migraines \nwith pressure of " + this.pressure + " hPa.";
         } else {
