@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, View, Text, StyleSheet, Image } from 'react-native';
+import { Button, View, Text, StyleSheet, Image, ActivityIndicator, FlatList } from 'react-native';
 import { Card, Divider } from 'react-native-elements';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -10,24 +10,120 @@ import Forecast from '../models/Forecast';
 
 export default class WeatherScreen extends Component {
 
+    constructor(props) {
+      super(props);
+
+      this.state = {
+        loadingCurr: true,
+        loadingFiveDay: true,
+        currentWeather: [],
+        fiveDayWeather: []
+      };
+    
+    }
+
     static navigationOptions = {
       title: 'Weather Conditions',
     };
 
+    componentDidMount() {
+      this.fetchCurrentConditions();
+      this.fetchFiveDay();
+    }
+
+    fetchCurrentConditions() {
+      return fetch('https://clearmind-backend.herokuapp.com/api/currentConditions')
+      .then((response) => response.json())
+      .then((responseJson) => {
+        this.setState({
+          loadingCurr: false,
+          currentWeather: responseJson,
+        });
+
+      })
+      .catch((error) =>{
+        console.error(error);
+      });
+    }
+
+    fetchFiveDay() {
+      return fetch('https://clearmind-backend.herokuapp.com/api/fiveDayForecast')
+      .then((response) => response.json())
+      .then((responseJson) => {
+        this.setState({
+          loadingFiveDay: false,
+          fiveDayWeather: responseJson.DailyForecasts,
+        });
+
+      })
+      .catch((error) =>{
+        console.error(error);
+      });
+    }
+ 
+
     render() {
       
-      const myForecast = new Forecast("MON", "weather-cloudy", "72°", "72°", "40°", 30, 87, 558, 25);
+      //Current conditions from AccuWeather
+      const myText = this.state.currentWeather.map((item) =>
+          {return item.WeatherText}
+      );
+      const myTemp = this.state.currentWeather.map((item) =>
+          {return item.Temperature.Imperial.Value}
+      );
+      const myPressure = this.state.currentWeather.map((item) =>
+         {return item.Pressure.Imperial.Value}
+      );
+      const myHumidity = this.state.currentWeather.map((item) =>
+         {return item.RelativeHumidity}
+      );
 
-      const day1 = new Forecast("MON", "weather-cloudy", "0", "72°", "40°", 30, 87, 558, 25);
-      const day2 = new Forecast("TUES", "weather-cloudy", "0", "68°", "45°", 9, 56, 450, 25);
-      const day3 = new Forecast("WED", "weather-sunny", "0", "50°", "42°", 25, 56, 450, 25);
-      const day4 = new Forecast("THURS", "weather-cloudy", "0", "64°", "48°", 25, 56, 450, 25);
-      const day5 = new Forecast("FRI", "weather-rainy", "0", "55°", "46°", 25, 56, 450, 25);
-      const fiveDay = [day1, day2, day3, day4, day5];
+      //Five day forecast info
+      const dates = this.state.fiveDayWeather.map((item) =>
+        {return item.Date}
+      );
+      const weatherTypes = this.state.fiveDayWeather.map((item) =>
+        {return item.Day.IconPhrase}
+      );
+      const highs = this.state.fiveDayWeather.map((item) =>
+        {return item.Temperature.Maximum.Value}
+      );
+      const lows = this.state.fiveDayWeather.map((item) =>
+        {return item.Temperature.Minimum.Value}
+      );
+      const grassCounts = this.state.fiveDayWeather.map((item) =>
+        {return item.AirAndPollen[1].Value}
+      );
+      const moldCounts = this.state.fiveDayWeather.map((item) =>
+        {return item.AirAndPollen[2].Value}
+      );
+      const ragweedCounts = this.state.fiveDayWeather.map((item) =>
+        {return item.AirAndPollen[3].Value}
+      );
+      const treeCounts = this.state.fiveDayWeather.map((item) =>
+        {return item.AirAndPollen[4].Value}
+      );
+
+      const today = new Forecast(dates[0], myText, myTemp, highs[0], lows[0], myPressure, myHumidity, moldCounts[0], ragweedCounts[0], grassCounts[0], treeCounts[0]);
+
+      const day2 = new Forecast(dates[1], weatherTypes[1], "0", highs[1], lows[1], 9, 56, moldCounts[1], ragweedCounts[1], grassCounts[1], treeCounts[1]);
+      const day3 = new Forecast(dates[2], weatherTypes[2], "0", highs[2], lows[2], 25, 56, moldCounts[2], ragweedCounts[2], grassCounts[2], treeCounts[2]);
+      const day4 = new Forecast(dates[3], weatherTypes[3], "0", highs[3], lows[3], 25, 56, moldCounts[3], ragweedCounts[3], grassCounts[3], treeCounts[3]);
+      const day5 = new Forecast(dates[4], weatherTypes[4], "0", highs[4], lows[4], 25, 56, moldCounts[4], ragweedCounts[4], grassCounts[4], treeCounts[4]);
+      const fiveDay = [today, day2, day3, day4, day5];
+
+      //Display scroll wheel while fetching data 
+      if (this.state.loadingCurr || this.state.loadingFiveDay) {
+        return(
+          <View>
+            <ActivityIndicator></ActivityIndicator>
+          </View>
+        )
+      }
 
       return (
         <View>
-          <CurrentCard location='Atlanta, GA' forecast={myForecast}></CurrentCard> 
+          <CurrentCard location='Atlanta, GA' forecast={today}></CurrentCard> 
           <View style={styles.viewStyle}>
             <Text style={styles.details}>Select a day to see details.</Text>
           </View>
@@ -38,10 +134,12 @@ export default class WeatherScreen extends Component {
                 title="Notification Settings"
                 onPress={() => this.props.navigation.navigate('Notifications')}
               /> 
-            </View>
+            </View>  
         </View>
+        
+
       );
-    }
+     }
 
 }
 

@@ -37,8 +37,8 @@ export default class FiveDayForecast extends Component {
                 <View style={styles.column}>
                   <Text style={styles.notes}>{fiveDayInfo.day}</Text>
                   <Icon name={fiveDayInfo.type} size={40} color='white'></Icon>
-                  <Text style={styles.notes}>{fiveDayInfo.highTemp}</Text>
-                  <Text style={styles.lowTemp}>{fiveDayInfo.lowTemp}</Text>
+                  <Text style={styles.notes}>{fiveDayInfo.highTemp + '°'}</Text>
+                  <Text style={styles.lowTemp}>{fiveDayInfo.lowTemp + '°'}</Text>
                   <Icon name={fiveDayInfo.displayIcon(true)} size={40} color={fiveDayInfo.displayIcon(false)}></Icon>
                 </View>
               </TouchableOpacity>
