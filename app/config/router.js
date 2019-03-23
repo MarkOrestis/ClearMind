@@ -4,8 +4,8 @@ import { createStackNavigator, createBottomTabNavigator, createAppContainer } fr
 import { Icon } from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import WeatherScreen from '../screens/WeatherScreen';
-import NotificationsScreen from '../screens/NotificationsScreen';
-import Ailments from '../screens/AilmentsScreen';
+import SettingsScreen from '../screens/SettingsScreen';
+import NotificationsScreen from '../screens/NotificationScreen';
 import EditSensitivities from '../screens/EditSensitivities';
 import LoginScreen from '../screens/Login';
 
@@ -21,6 +21,9 @@ export const RootStack = createStackNavigator(
     Weather: {
       screen: WeatherScreen,
     },
+    Settings: {
+      screen: SettingsScreen,
+    },
     Notifications: {
       screen: NotificationsScreen,
     }
@@ -29,15 +32,50 @@ export const RootStack = createStackNavigator(
     initialRouteName: 'LoginScreen',
   }
 );
+//sample code that shows logic for using token to persist
+// constructor() {
+//     super();
+//     this.state = { hasToken: false, isLoaded: false };
+//   }
 
+//   componentDidMount() {
+//     AsyncStorage.getItem('id_token').then((token) => {
+//       this.setState({ hasToken: token !== null, isLoaded: true })
+//     });
+//   }
+
+//   render() {
+//     if (!this.state.isLoaded) {
+//       return (
+//         <ActivityIndicator />  //simple loading widget
+//       )
+//     } else {
+//       return(
+//         <Router>
+//           <Scene key='root'>
+//             <Scene
+//               component={Authentication}
+//               initial={!this.state.hasToken}  //sends user to this when no token i think
+//               (...)
+//             />
+//             <Scene
+//               component={HomePage}
+//               initial={this.state.hasToken}  //sends user to this when token i think
+//               (...)
+//             />
+//             </Scene>
+//         </Router>
+//       )
+//     }
+//   }
 // I (Mary) tried to add a bottomtabnavigator but kept getting errors
 
 // const WeatherStack = createStackNavigator({
-//   Notifications: { screen: NotificationsScreen },
+//   Settings: { screen: SettingsScreen },
 //   Ailments: {screen: Ailments},
 // });
 
-// const NotificationsStack = createStackNavigator({
+// const SettingsStack = createStackNavigator({
 //   Weather: { screen: WeatherScreen },
 //   Ailments: {screen: Ailments},
 // });
@@ -45,7 +83,7 @@ export const RootStack = createStackNavigator(
 // export const AppTabNavigator = createBottomTabNavigator(
 //   {
 //     Weatherr: { screen: WeatherStack },
-//     Settings: { screen: NotificationsStack },
+//     Settings: { screen: SettingsStack },
 //   },
 //   {
 //     // defaultNavigationOptions: ({ navigation }) => ({
@@ -54,7 +92,7 @@ export const RootStack = createStackNavigator(
 //     //     let iconName;
 //     //     if (routeName === 'Weather') {
 //     //       iconName = `weather-cloudy`;
-//     //     } else if (routeName === 'Notifications') {
+//     //     } else if (routeName === 'Settings') {
 //     //       iconName = `settings`;
 //     //     }
 

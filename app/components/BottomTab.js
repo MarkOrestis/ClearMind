@@ -4,20 +4,20 @@ import { createStackNavigator, createBottomTabNavigator, createAppContainer } fr
 import { Icon } from 'react-native-vector-icons/MaterialCommunityIcons';
 import WeatherScreen from '../screens/WeatherScreen';
 import AilmentsScreen from '../screens/AilmentsScreen';
-import NotificationsScreen from '../screens/NotificationsScreen';
+import SettingsScreen from '../screens/SettingsScreen';
 
 // const WeatherStack = createStackNavigator({
-//     Notifications: { screen: NotificationsScreen },
+//     Settings: { screen: SettingsScreen },
 //   });
   
-//   const NotificationsStack = createStackNavigator({
+//   const SettingsStack = createStackNavigator({
 //     Weather: { screen: WeatherScreen },
 //   });
   
   const BottomTab = createAppContainer(createBottomTabNavigator(
     // {
     //   Weather: { screen: WeatherStack },
-    //   Notifications: { screen: NotificationsStack },
+    //   Settings: { screen: SettingsStack },
     // },
     // {
     //   defaultNavigationOptions: ({ navigation }) => ({
@@ -26,7 +26,7 @@ import NotificationsScreen from '../screens/NotificationsScreen';
     //       let iconName;
     //       if (routeName === 'Weather') {
     //         iconName = `weather-cloudy`;
-    //       } else if (routeName === 'Notifications') {
+    //       } else if (routeName === 'Settings') {
     //         iconName = `settings`;
     //       }
   
