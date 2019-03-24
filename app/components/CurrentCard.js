@@ -85,6 +85,25 @@ export default class CurrentCard extends Component {
           <Divider style={{ backgroundColor: '#dfe6e9', marginTop:6, marginBottom:2}} />
           
           <View style={{flexDirection:'row', justifyContent:'space-between'}}>
+            <Text style={styles.notesHeaders}>AIR QUALITY</Text>
+            <Text style={styles.notesHeaders}>UV INDEX</Text>
+          </View>
+
+          <View style={{flexDirection:'row', justifyContent:'space-between'}}>
+            <View style={{flexDirection:'row'}}>
+              <Text style={styles.notes}>{this.state.forecast.aq}</Text>
+              {icons[2]}
+            </View>
+            <View style={{flexDirection:'row'}}>
+              {icons[3]}
+              <Text style={styles.notes}>{this.state.forecast.uv}</Text>
+            </View>
+            
+          </View>
+
+          <Divider style={{ backgroundColor: '#dfe6e9', marginTop:6, marginBottom:2}} />
+          
+          <View style={{flexDirection:'row', justifyContent:'space-between'}}>
             <Text style={styles.notesHeaders}>GRASS POLLEN</Text>
             <Text style={styles.notesHeaders}>TREE POLLEN</Text>
           </View>
@@ -104,8 +123,8 @@ export default class CurrentCard extends Component {
           <Divider style={{ backgroundColor: '#dfe6e9', marginTop:6, marginBottom:2}} />
           
           <View style={{flexDirection:'row', justifyContent:'space-between'}}>
-            <Text style={styles.notesHeaders}>MOLD POLLEN</Text>
-            <Text style={styles.notesHeaders}>RAGWEED POLLEN</Text>
+            <Text style={styles.notesHeaders}>MOLD</Text>
+            <Text style={styles.notesHeaders}>RAGWEED</Text>
           </View>
 
           <View style={{flexDirection:'row', justifyContent:'space-between'}}>
