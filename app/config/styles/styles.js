@@ -40,6 +40,11 @@ export const styles = StyleSheet.create({
 		marginTop: 25,
 		marginBottom: 0,
 	},
+	googleSignin: {
+		marginTop: 20,
+		textAlign:"center",
+		color:"#FBBC05"
+	},
     // loginForeground: {
 	// 	flex: 1,
 	// 	flexDirection: "column",

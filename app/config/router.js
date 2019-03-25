@@ -8,12 +8,16 @@ import SettingsScreen from '../screens/SettingsScreen';
 import NotificationsScreen from '../screens/NotificationScreen';
 import EditSensitivities from '../screens/EditSensitivities';
 import LoginScreen from '../screens/Login';
+import Signup from '../screens/Signup';
 
 
 export const RootStack = createStackNavigator(
   {
     LoginScreen: {
         screen: LoginScreen,
+    },
+    Signup: {
+      screen: Signup,
     },
     EditSensitivities: {
         screen: EditSensitivities,

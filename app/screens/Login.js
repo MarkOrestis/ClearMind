@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { GoogleSignin } from 'react-native-google-signin';
 import {TouchableOpacity} from "react-native"
 import {
   Button,
@@ -53,6 +54,17 @@ export default class Login extends Component {
   
     updatePassword(password) {
       this.setState({password});
+    }
+
+    loginWithGoogle() {
+      Authenticator.loginWithGoogle()
+        .then(() => {
+          this.props.navigation.navigate("Home");
+        })
+        .catch((error) => {
+          console.log(error);
+          Alert.alert(strings.unableGoogLogin);
+        })
     }
   
     login() {
@@ -110,12 +122,21 @@ export default class Login extends Component {
                 <Text> Sign In</Text>
               </Button> */}
 
-              <Text style={[colorStyles.primaryText, {textAlign:"center", marginTop:20}]}>
+              <Text style={[colorStyles.primaryText, {textAlign:"center", marginTop:20}]} onPress={() => {this.props.navigation.navigate('Signup')}}>
                   Don't have an account? <Text style={{color:"#000000"}}>Sign Up</Text>
               </Text>
-              <Text style={{textAlign:"center", color:"#000000"}}>
+              <Text style={{textAlign:"center", color:"#000000"}} onPress={() => {this.props.navigation.navigate('Signup')}}>
                   Forgot Password?
               </Text>
+
+              <View style={{ flexDirection: 'row', justifyContent: 'center'}}>
+              {/* <Icon type="FontAwesome" name="google" size={12} /> */}
+                <TouchableOpacity onPress={() => {this.loginWithGoogle()}}>
+                  <Text style={styles.googleSignin}>
+                      Sign in with Goole
+                </Text>
+                </TouchableOpacity>
+              </View>
               
             </View>
           </Content>

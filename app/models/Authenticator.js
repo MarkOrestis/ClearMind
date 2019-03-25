@@ -1,45 +1,138 @@
 //import {AsyncStorage, (...) } from 'react-native'
+import firebase from 'react-native-firebase';
+
 
 
 export class Authenticator {
 
-  // async saveItem(item, selectedValue) {
-  //   try {
-  //     await AsyncStorage.setItem(item, selectedValue);
-  //   } catch (error) {
-  //     console.error('AsyncStorage error: ' + error.message);
-  //   }
-  // }
-
   static login(email, password) {
-    return new Promise(function(resolve, reject) {
-      fetch(
-        `https://clearmind-backend.herokuapp.com/api/user/${email}&${password}`
-      )
-        .then(res => res.json())
-        .then(res => {
-          if (res.message == "i dont exist") {
-            reject();
-          } else {
+      return new Promise(function(resolve, reject) {
+         firebase.auth().signInWithEmailAndPassword(email, password)
+         .then(() => {
             resolve();
+         })
+         .catch(() => {
+            reject();
+         })
+      });
+
+  }
+
+  static logout() {
+      return new Promise(function(resolve, reject) {
+          firebase.auth().signOut().then(() => {
+              resolve();
+          })
+          .catch((error) => {
+              reject(error);
+          })
+      })
+  }
+
+
+  static userIsLoggedIn(result) {
+      firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+          result(true);
+        } else {
+          result(false);
+        }
+      });
+  }
+
+  static forgotPassword(email) {
+      return new Promise(function(resolve, reject) {
+          firebase.auth().sendPasswordResetEmail(email).then(() => {
+              resolve();
+          })
+          .catch((error) => {
+              reject(error);
+          });
+      })
+  }
+
+  static register(email, password, result) {
+      return new Promise(function(resolve, reject) {
+          firebase.auth().createUserWithEmailAndPassword(email, password)
+              .then(() => {
+                  resolve();
+              })
+              .catch((error) => {
+                  reject();
+              });
+      });
+
+  }
+
+  static loginWithGoogle() {
+    return new Promise((resolve, reject) => {
+      GoogleSignin.configure();
+        GoogleSignin.signIn()
+        .then((data) => {
+            const credential = firebase.auth.GoogleAuthProvider.credential(data.idToken, data.accessToken);
+            firebase.auth().signInWithCredential(credential)
+              .then(() => {
+                resolve();
+              })
+              .catch((error) => {
+                console.log(error);
+                reject();
+              });
           }
-        })
-        .catch(error => {
+        )
+        .catch((error) => {
           console.log(error);
           reject();
         });
+    //   .catch((error) => {
+    //     reject();
+    //   })
     });
   }
-
-  static userIsLoggedIn(result) {
-    firebase.auth().onAuthStateChanged(function(user) {
-        if (user) {
-            result(true);
-        } else {
-            result(false);
-        }
-    });
+  
 }
+
+
+
+// export class Authenticator {
+
+//   // async saveItem(item, selectedValue) {
+//   //   try {
+//   //     await AsyncStorage.setItem(item, selectedValue);
+//   //   } catch (error) {
+//   //     console.error('AsyncStorage error: ' + error.message);
+//   //   }
+//   // }
+
+//   static login(email, password) {
+//     return new Promise(function(resolve, reject) {
+//       fetch(
+//         `https://clearmind-backend.herokuapp.com/api/user/${email}&${password}`
+//       )
+//         .then(res => res.json())
+//         .then(res => {
+//           if (res.message == "i dont exist") {
+//             reject();
+//           } else {
+//             resolve();
+//           }
+//         })
+//         .catch(error => {
+//           console.log(error);
+//           reject();
+//         });
+//     });
+//   }
+
+//   static userIsLoggedIn(result) {
+//     firebase.auth().onAuthStateChanged(function(user) {
+//         if (user) {
+//             result(true);
+//         } else {
+//             result(false);
+//         }
+//     });
+// }
 
 // userSignup() {
 //   if (!this.state.username || !this.state.password) return;
@@ -120,4 +213,4 @@ export class Authenticator {
 //       console.log('AsyncStorage error: ' + error.message);
 //     }
 //   }
-}
+// }

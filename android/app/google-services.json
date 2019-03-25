@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "1012677208238",
+    "firebase_url": "https://clearmind-4261.firebaseio.com",
+    "project_id": "clearmind-4261",
+    "storage_bucket": "clearmind-4261.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1012677208238:android:0a00023e0f14a3e1",
+        "android_client_info": {
+          "package_name": "Clear.Mind"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1012677208238-44p69o57hhc7keqmr08374cctjaljecu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCEdBIbdjNQkHWWZwAMW2Dv7vixFSmgfQI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
