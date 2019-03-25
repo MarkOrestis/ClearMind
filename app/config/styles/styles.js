@@ -27,7 +27,7 @@ export const styles = StyleSheet.create({
 		color: '#000000',
 		alignSelf: 'center',
 		textAlign: 'center',
-		flexGrow: 1
+		flexGrow: 1,
 	},
 	weatherDetails: {
 		fontSize: 18,

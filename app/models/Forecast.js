@@ -48,7 +48,7 @@ export default class Forecast {
         if (this.alertFor() == "pollen") {
             return "Hazard day for allergies \nwith pollen counts of " + this.tree + ".";
         } else if (this.alertFor() == "pressure") {
-            return "Hazard day for migraines \nwith pressure of " + this.pressure + " hPa.";
+            return "Migraine Warning! \nPressure drop of " + this.pressure + " hPa.";
         } else {
             return "No significant changes in weather conditions! Have a great day!";
         }

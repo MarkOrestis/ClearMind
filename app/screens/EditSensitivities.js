@@ -15,17 +15,14 @@ const pollenScales = [
     { label: "Affects Me", value: "1", activeColor: '#FF0000'}
 ];
 
-headerTitleStyles = {color: '#000000',
-                    alignSelf: 'center',
-                    textAlign: 'center',
-                    flexGrow: 1};
-
-
 import {
     Container,
     Item,
     Button,
+    Icon
 } from 'native-base'
+
+import {styles} from '../config/styles/styles'
 
 import User from "../models/User";
 
@@ -41,7 +38,17 @@ export default class EditSensitivities extends Component {
         };
         this.pollenRating = this.pollenRating.bind(this);
         this.state.user = new User();
-    }
+    }   
+
+    static navigationOptions = () => ({
+        title: 'Sensitivities',
+        headerTransparent: true,
+        headerTitleStyle: {color: '#000000',
+                            alignSelf: 'center',
+                            textAlign: 'center',
+                            flexGrow: 1},
+                            headerRight: <Icon name="settings" size={28} style={{paddingRight: 20, color: '#FFFFFF'}} />,
+    });
 
     componentDidMount() {
         navigator.geolocation.getCurrentPosition(
@@ -101,12 +108,6 @@ export default class EditSensitivities extends Component {
             
         }
     }
-
-    static navigationOptions = () => ({
-        title: "Sensitivities",
-        headerTransparent: true,
-        headerTitleStyle: headerTitleStyles
-    });
 
 
     render() {

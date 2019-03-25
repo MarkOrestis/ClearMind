@@ -36,14 +36,12 @@ export default class Login extends Component {
       // });
      }
 
-     headerTitleStyles = {color: '#000000',
-                          alignSelf: 'center',
-                          textAlign: 'center',
-                          flexGrow: 1};
-
      static navigationOptions = () => ({
         headerTransparent: true,
-        headerTitleStyle: headerTitleStyles
+        headerTitleStyle: {color: '#000000',
+                          alignSelf: 'center',
+                          textAlign: 'center',
+                          flexGrow: 1}
       });
   
   
