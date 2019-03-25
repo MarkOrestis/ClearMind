@@ -97,6 +97,9 @@ export default class WeatherScreen extends Component {
       const lows = this.state.fiveDayWeather.map((item) =>
         {return item.Temperature.Minimum.Value}
       );
+      const airQualities = this.state.fiveDayWeather.map((item) =>
+        {return item.AirAndPollen[0].Value}
+      );
       const grassCounts = this.state.fiveDayWeather.map((item) =>
         {return item.AirAndPollen[1].Value}
       );
@@ -109,13 +112,16 @@ export default class WeatherScreen extends Component {
       const treeCounts = this.state.fiveDayWeather.map((item) =>
         {return item.AirAndPollen[4].Value}
       );
+      const uvIndices = this.state.fiveDayWeather.map((item) =>
+        {return item.AirAndPollen[5].Value}
+      );
 
-      const today = new Forecast(dates[0], myText, myTemp, highs[0], lows[0], myPressure, myHumidity, moldCounts[0], ragweedCounts[0], grassCounts[0], treeCounts[0]);
+      const today = new Forecast(dates[0], myText, myTemp, highs[0], lows[0], myPressure, myHumidity, moldCounts[0], ragweedCounts[0], grassCounts[0], treeCounts[0], airQualities[0], uvIndices[0]);
 
-      const day2 = new Forecast(dates[1], weatherTypes[1], "0", highs[1], lows[1], 9, 56, moldCounts[1], ragweedCounts[1], grassCounts[1], treeCounts[1]);
-      const day3 = new Forecast(dates[2], weatherTypes[2], "0", highs[2], lows[2], 25, 56, moldCounts[2], ragweedCounts[2], grassCounts[2], treeCounts[2]);
-      const day4 = new Forecast(dates[3], weatherTypes[3], "0", highs[3], lows[3], 25, 56, moldCounts[3], ragweedCounts[3], grassCounts[3], treeCounts[3]);
-      const day5 = new Forecast(dates[4], weatherTypes[4], "0", highs[4], lows[4], 25, 56, moldCounts[4], ragweedCounts[4], grassCounts[4], treeCounts[4]);
+      const day2 = new Forecast(dates[1], weatherTypes[1], "0", highs[1], lows[1], 9, 56, moldCounts[1], ragweedCounts[1], grassCounts[1], treeCounts[1], airQualities[1], uvIndices[1]);
+      const day3 = new Forecast(dates[2], weatherTypes[2], "0", highs[2], lows[2], 25, 56, moldCounts[2], ragweedCounts[2], grassCounts[2], treeCounts[2], airQualities[2], uvIndices[2]);
+      const day4 = new Forecast(dates[3], weatherTypes[3], "0", highs[3], lows[3], 25, 56, moldCounts[3], ragweedCounts[3], grassCounts[3], treeCounts[3], airQualities[3], uvIndices[3]);
+      const day5 = new Forecast(dates[4], weatherTypes[4], "0", highs[4], lows[4], 25, 56, moldCounts[4], ragweedCounts[4], grassCounts[4], treeCounts[4], airQualities[4], uvIndices[4]);
       const fiveDay = [today, day2, day3, day4, day5];
 
       //Display scroll wheel while fetching data 

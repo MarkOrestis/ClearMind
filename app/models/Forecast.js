@@ -1,7 +1,7 @@
 //import React, { Component } from "react";
 
 export default class Forecast {
-    constructor(day, type, currTemp, highTemp, lowTemp, pressure, humidity, mold, ragweed, grass, tree) {
+    constructor(day, type, currTemp, highTemp, lowTemp, pressure, humidity, mold, ragweed, grass, tree, aq, uv) {
        this.day = day ? day.toString().substring(5, 10) : ""; //type ? type.toString() : ""
        this.type = this.typeToIcon(type); 
        this.currTemp = currTemp;
@@ -13,6 +13,8 @@ export default class Forecast {
        this.ragweed = ragweed;
        this.grass = grass;
        this.tree = tree;
+       this.aq = aq;
+       this.uv = uv;
        this.alertFor = this.alertFor.bind(this);
     }
 
