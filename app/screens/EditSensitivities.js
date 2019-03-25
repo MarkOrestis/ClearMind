@@ -4,15 +4,15 @@ import { Text } from "react-native";
 import SwitchSelector from "react-native-switch-selector";
 
 const sensitivitiesScales = [
-    { label: "No Effect", value: "x", activeColor: '#228B44'},
-    { label: "Minor", value: "n", activeColor: '#4682B4'},
-    { label: "Moderate", value: "n", activeColor: '#FFA500'},
-    { label: "Intense", value: "g", activeColor: '#FF0000'}
+    { label: "No Effect", value: "0", activeColor: '#228B44'},
+    { label: "Minor", value: "1", activeColor: '#4682B4'},
+    { label: "Moderate", value: "2", activeColor: '#FFA500'},
+    { label: "Intense", value: "3", activeColor: '#FF0000'}
 ];
 
 const pollenScales = [
-    { label: "No Effect", value: "x", activeColor: '#228B44'},
-    { label: "Affects Me", value: "g", activeColor: '#FF0000'}
+    { label: "No Effect", value: "0", activeColor: '#228B44'},
+    { label: "Affects Me", value: "1", activeColor: '#FF0000'}
 ];
 
 headerTitleStyles = {color: '#000000',
@@ -35,13 +35,11 @@ export default class EditSensitivities extends Component {
 
         this.state = {
             user: {},
-            page: 1,
             pollen: false,
             lat: '',
             lon: '',
         };
         this.pollenRating = this.pollenRating.bind(this);
-        this.ratingCompleted = this.ratingCompleted.bind(this)
         this.state.user = new User();
     }
 
@@ -92,11 +90,16 @@ export default class EditSensitivities extends Component {
             this.setState({pollen: true});
         } else {
             this.setState({pollen: false})
+            // this.setState({user: {...this.state.user, grass: 0}})
+            // this.setState({user: {...this.state.user, tree: 0}})
+            // this.setState({user: {...this.state.user, mold: 0}})
+            // this.setState({user: {...this.state.user, weed: 0}})
+            console.log("user's grass: " + this.state.user.grass);
+            console.log("user's tree: " + this.state.user.tree);
+            console.log("user's mold: " + this.state.user.mold);
+            console.log("user's weed: " + this.state.user.weed);
+            
         }
-    }
-
-    ratingCompleted(rating) {
-        this.setState({user: { ...this.state.user, pressure: rating}});
     }
 
     static navigationOptions = () => ({
@@ -113,9 +116,7 @@ export default class EditSensitivities extends Component {
                     <Text style={{fontWeight:'bold', fontSize: 16, paddingRight: 10}}> Pressure</Text>
                     <SwitchSelector
                         initial={0}
-                        onPress={() => {
-                            value => this.setState({ gender: value })
-                        }}
+                        onPress={ value => {this.state.user.pressure} }
                         textColor={'#000000'}
                         selectedColor={'#FFFFFF'}
                         height={26}
@@ -128,9 +129,7 @@ export default class EditSensitivities extends Component {
                     <Text style={{fontWeight:'bold', fontSize: 16, paddingRight: 36}}> Light</Text>
                     <SwitchSelector
                         initial={0}
-                        onPress={() => {
-                            value => this.setState({ gender: value })
-                        }}
+                        onPress={value => {this.state.user.light} }
                         textColor={'#000000'}
                         selectedColor={'#FFFFFF'}
                         height={30}
@@ -142,8 +141,12 @@ export default class EditSensitivities extends Component {
                 <Item style={{padding: 4}}>
                     <Text style={{fontWeight:'bold', fontSize: 16, paddingRight: 28 }}> Pollen</Text>
                     <SwitchSelector
-                        initial={0}
-                        onPress={value => this.setState({ pollen: value })}
+                        initial={this.state.user.pollen}
+                        onPress={(value) => { 
+                            console.log("value is: " + value);
+                            this.setState({user: {...this.state.user, pollen: value}})
+                            this.pollenRating(value); 
+                        }}
                         textColor={'#000000'}
                         selectedColor={'#FFFFFF'}
                         height={30}
@@ -155,8 +158,11 @@ export default class EditSensitivities extends Component {
                 <Item style={this.state.pollen ? {padding: 4} : { display: "none" }}>
                     <Text style={{fontWeight:'bold', fontSize: 16, paddingRight: 31 }}> Grass</Text>
                     <SwitchSelector
-                        initial={0}
-                        onPress={value => this.setState({ gender: value })}
+                        initial={this.state.user.grass}
+                        onPress={(value) => { 
+                            console.log("value is: " + value);
+                            this.setState({user: {...this.state.user, grass: value}})
+                        }}
                         textColor={'#000000'}
                         selectedColor={'#FFFFFF'}
                         height={30}
@@ -168,8 +174,11 @@ export default class EditSensitivities extends Component {
                 <Item style={this.state.pollen ? {padding: 4} : { display: "none" }}>
                     <Text style={{fontWeight:'bold', fontSize: 16, paddingRight: 40 }}> Tree</Text>
                     <SwitchSelector
-                        initial={0}
-                        onPress={value => this.setState({ gender: value })}
+                        initial={this.state.user.tree}
+                        onPress={(value) => { 
+                            console.log("value is: " + value);
+                            this.setState({user: {...this.state.user, tree: value}})
+                        }}
                         textColor={'#000000'}
                         selectedColor={'#FFFFFF'}
                         height={30}
@@ -181,8 +190,11 @@ export default class EditSensitivities extends Component {
                 <Item style={this.state.pollen ? {padding: 4} : { display: "none" }}>
                     <Text style={{fontWeight:'bold', fontSize: 16, paddingRight: 36 }}> Mold</Text>
                     <SwitchSelector
-                        initial={0}
-                        onPress={value => this.setState({ gender: value })}
+                        initial={this.state.user.mold}
+                        onPress={(value) => { 
+                            console.log("value is: " + value);
+                            this.setState({user: {...this.state.user, mold: value}})
+                        }}
                         textColor={'#000000'}
                         selectedColor={'#FFFFFF'}
                         height={30}
@@ -194,8 +206,11 @@ export default class EditSensitivities extends Component {
                 <Item style={this.state.pollen ? {padding: 4} : { display: "none" }}>
                     <Text style={{fontWeight:'bold', fontSize: 16, paddingRight: 32 }}> Weed</Text>
                     <SwitchSelector
-                        initial={0}
-                        onPress={value => this.setState({ gender: value })}
+                        initial={this.state.user.weed}
+                        onPress={(value) => { 
+                            console.log("value is: " + value);
+                            this.setState({user: {...this.state.user, weed: value}})
+                        }}
                         textColor={'#000000'}
                         selectedColor={'#FFFFFF'}
                         height={30}

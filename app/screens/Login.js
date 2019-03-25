@@ -110,10 +110,10 @@ export default class Login extends Component {
                 <Text> Sign In</Text>
               </Button> */}
 
-              <Text style={[colorStyles.primaryText, {textAlign:"center", marginTop:20}]} onPress={() => {navigate('Signup')}}>
+              <Text style={[colorStyles.primaryText, {textAlign:"center", marginTop:20}]}>
                   Don't have an account? <Text style={{color:"#000000"}}>Sign Up</Text>
               </Text>
-              <Text style={{textAlign:"center", color:"#000000"}} onPress={() => {navigate('Signup')}}>
+              <Text style={{textAlign:"center", color:"#000000"}}>
                   Forgot Password?
               </Text>
               

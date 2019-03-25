@@ -130,18 +130,18 @@ export default class WeatherScreen extends Component {
       return (
         <View style={{paddingTop: 80}}>
           <CurrentCard location='Atlanta, GA' forecast={today}></CurrentCard> 
-          <View style={styles.viewStyle}>
-            <Text style={styles.details}>Select a day to see details.</Text>
+          <View style={styles.weatherViewStyle}>
+            <Text style={styles.weatherDetails}>Select a day to see details.</Text>
 
           </View>
           <FiveDayForecast fiveDay={fiveDay}></FiveDayForecast>
-          <View style={{flexDirection:'row', alignItems: 'center', justifyContent: 'center'}}>
+          {/* <View style={{flexDirection:'row', alignItems: 'center', justifyContent: 'center'}}>
               <Icon name='settings' size={24} onPress={() => this.props.navigation.navigate('Settings')}></Icon>
               <Button 
                 title="Notification Settings"
                 onPress={() => this.props.navigation.navigate('Settings')}
               /> 
-            </View>  
+            </View>   */}
         </View>
         
 
