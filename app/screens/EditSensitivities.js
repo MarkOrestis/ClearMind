@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Text } from "react-native";
+import { Platform, Text } from "react-native";
 
 import SwitchSelector from "react-native-switch-selector";
 
@@ -112,7 +112,7 @@ export default class EditSensitivities extends Component {
 
     render() {
         return (
-            <Container style={{paddingTop:20}}>
+            <Container style={Platform.select({ios: {paddingTop:20}, android: {}})}>
                 <Item style={{paddingBottom:4, paddingTop: 75}}>
                     <Text style={{fontWeight:'bold', fontSize: 16, paddingRight: 10}}> Pressure</Text>
                     <SwitchSelector

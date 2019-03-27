@@ -8,24 +8,28 @@ export class PredictionModel {
 
 
         let pollens = tomWeather.AirAndPollen;
-        let grass = pollens[0].Value
-        let mold = pollens[1].Value
-        let ragweed = pollens[2].Value
-        let tree = pollens[3].Value
-        let nextDayUVIndex = pollens[4].value;
+        let grassVal = pollens[0].CategoryValue;
+        let moldVal = pollens[1].CategoryValue;
+        let ragweedVal = pollens[2].CategoryValue;
+        let treeVal = pollens[3].CategoryValue;
+        let nextDayUVIndex = pollens[4].Value;
 
-        let grassSensitivity = grass * user.grass;
-        let moldSensitivity = mold * user.mold;
-        let ragweedSensitivity = ragweed * user.ragweed;
-        let treeSensitivity = tree * user.tree;
+        let grassSensitivity = grassVal * user.grass;
+        let moldSensitivity = moldVal * user.mold;
+        let ragweedSensitivity = ragweedVal * user.ragweed;
+        let treeSensitivity = treeVal * user.tree;
         let lightNextDay = nextDayUVIndex * user.light;
 
         let light = 0;
         let pressure = 0;     
         let pollen = 0;
+        let grass = getPollenSensitivity(grassSensitivity);
+        let mold = getPollenSensitivity(moldSensitivity);
+        let ragweed = getPollenSensitivity(ragweedSensitivity);
+        let tree = getPollenSensitivity(treeSensitivity);
         
         if (pressureSensitvity > 0) {
-            if (pressureSensitvity >=18) {
+            if (pressureSensitvity >= 18) {
                 // if > 3 chance of migraine is high
                 pressure = 5;
             } else if (pressureSensitvity >= 14) {
@@ -50,10 +54,21 @@ export class PredictionModel {
             }
         }
 
-        
 
-        
-        
+
+        // Function to get the sensitivity for any pollen since they all use the same ranges
+        getPollenSensitivity(sensitivity) = function() {
+            if (sensitivity >= 6) {
+                return 3;
+            } else if (sensitivity >= 3) {
+                return 2;
+            } else if (sensitivity >= 2) {
+                return 1;
+            } else {
+                return 0;
+            }
+        }
+  
 
     }
 }
