@@ -45,7 +45,7 @@ export default class CurrentCard extends Component {
       // } else if (this.state.forecast.alertFor == 'pressure') {
       //   icons[1] = alert;
       // }
-      if (this.state.forecast.pollen > 550) {
+      if (this.state.forecast.tree >= 50) {
         icons[2] = alert;
       } else if (this.state.forecast.pressure < 10) {
         icons[1] = alert;
@@ -92,7 +92,7 @@ export default class CurrentCard extends Component {
           <View style={{flexDirection:'row', justifyContent:'space-between'}}>
             <View style={{flexDirection:'row'}}>
               <Text style={styles.notes}>{this.state.forecast.aq}</Text>
-              {icons[2]}
+              {icons[3]}
             </View>
             <View style={{flexDirection:'row'}}>
               {icons[3]}
@@ -111,10 +111,10 @@ export default class CurrentCard extends Component {
           <View style={{flexDirection:'row', justifyContent:'space-between'}}>
             <View style={{flexDirection:'row'}}>
               <Text style={styles.notes}>{this.state.forecast.grass}</Text>
-              {icons[2]}
+              {icons[3]}
             </View>
             <View style={{flexDirection:'row'}}>
-              {icons[3]}
+              {icons[2]}
               <Text style={styles.notes}>{this.state.forecast.tree}</Text>
             </View>
             
@@ -130,7 +130,7 @@ export default class CurrentCard extends Component {
           <View style={{flexDirection:'row', justifyContent:'space-between'}}>
             <View style={{flexDirection:'row'}}>
               <Text style={styles.notes}>{this.state.forecast.mold}</Text>
-              {icons[2]}
+              {icons[3]}
             </View>
             <View style={{flexDirection:'row'}}>
               {icons[3]}

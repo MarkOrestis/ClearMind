@@ -23,10 +23,12 @@ export default class Forecast {
             return "weather-sunny";
         } else if (myType == "Cloudy") {
             return "weather-cloudy";
-        } else if (myType == "Mostly sunny" || myType == "Mostly cloudy") {
+        } else if (myType == "Mostly sunny" || myType == "Mostly cloudy" || myType == "Partly cloudy" || myType == "Partly sunny") {
             return "weather-partlycloudy";
         } else if (myType == "Thunderstorms") {
             return "weather-lightning";
+        } else if (myType == "Rain" || myType == "Showers" || myType == "Mostly cloudy w/ showers") {
+            return "weather-rainy";
         } else {
             return "weather-cloudy";
         }
@@ -35,7 +37,7 @@ export default class Forecast {
     alertFor() {
         //Returns whichever weather condition warrants an alert based on algorithm
         //For now, returns pollen over 550 or pressure under 10 hPa
-        if (this.tree > 550) {
+        if (this.tree >= 50) {
             return "pollen";
         } else if (this.pressure < 10) {
             return "pressure";
@@ -46,7 +48,7 @@ export default class Forecast {
 
     toString() {
         if (this.alertFor() == "pollen") {
-            return "Hazard day for allergies \nwith pollen counts of " + this.tree + ".";
+            return "Allergy warning! \nTree pollen counts of " + this.tree + ".";
         } else if (this.alertFor() == "pressure") {
             return "Migraine Warning! \nPressure drop of " + this.pressure + " hPa.";
         } else {
