@@ -63,7 +63,7 @@ export default class Login extends Component {
         })
         .catch((error) => {
           console.log(error);
-          Alert.alert(strings.unableGoogLogin);
+          Alert.alert("Error logging in with Google");
         })
     }
   
@@ -133,7 +133,7 @@ export default class Login extends Component {
               {/* <Icon type="FontAwesome" name="google" size={12} /> */}
                 <TouchableOpacity onPress={() => {this.loginWithGoogle()}}>
                   <Text style={styles.googleSignin}>
-                      Sign in with Goole
+                      Sign in with Google
                 </Text>
                 </TouchableOpacity>
               </View>

@@ -46,6 +46,7 @@ export class Authenticator {
               resolve();
           })
           .catch((error) => {
+            console.log(error);
               reject(error);
           });
       })
@@ -58,6 +59,7 @@ export class Authenticator {
                   resolve();
               })
               .catch((error) => {
+                  // console.log(error);
                   reject();
               });
       });
