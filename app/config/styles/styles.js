@@ -23,12 +23,6 @@ export const styles = StyleSheet.create({
 		margin:20,
 		paddingBottom: 120
 	},
-	headerTitleStyles: {
-		color: '#000000',
-		alignSelf: 'center',
-		textAlign: 'center',
-		flexGrow: 1
-	},
 	weatherDetails: {
 		fontSize: 18,
 		fontWeight: 'bold',
