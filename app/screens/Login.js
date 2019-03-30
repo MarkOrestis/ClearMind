@@ -30,11 +30,11 @@ export default class Login extends Component {
       }
       
       // For when we have user persistence
-      // Authenticator.userIsLoggedIn((result) => {
-      //     if (result) {
-      //         this.props.navigation.navigate("WeatherScreen");
-      //     }
-      // });
+      Authenticator.userIsLoggedIn((result) => {
+          if (result) {
+              this.props.navigation.navigate("WeatherScreen");
+          }
+      });
      }
 
 

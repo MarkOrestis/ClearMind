@@ -1,4 +1,4 @@
-package com.clearmind;
+package Clear.mind4261;
 
 import com.facebook.react.ReactActivity;
 
