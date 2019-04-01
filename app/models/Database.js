@@ -1,7 +1,7 @@
 import firebase from 'react-native-firebase';
 
 
-import User from './User';
+import User from './User'
 
 export class Database {
     static getUserId() {
@@ -20,4 +20,31 @@ export class Database {
         return firebase.auth().currentUser.photoURL;
     }
     
+    static storeSensitivities(user) {
+        return new Promise((resolve, reject) => {
+            var userId = Database.getUserId();
+            const database = firebase.database();
+            const userRef = database.ref("users/" + userId);
+            userRef.set(user);
+            application.submittedDate = (new Date()).toString();
+            resolve();
+        });
+    }
+
+    static loadSensitivities() {
+        return new Promise((resolve, reject) => {
+            var userId = Database.getUserId();
+            const database = firebase.database();
+            const userRef = database.ref("users/" + userId);
+            userRef.once("value").then((userSnapshot) => {
+                if (userSnapshot.exists()) {
+                    var user = new User(userSnapshot.val());
+                    user.id = userSnapshot.key;
+                }
+                else {
+                    resolve(new User());
+                }
+            })
+        })
+    }
 }

@@ -18,10 +18,6 @@ import { colorStyles, colorPalette } from '../config/styles/colorStyles'
 
 export default class Login extends Component {
 
-    static navigationOptions = {
-      title: '',
-    };
-
     constructor(props) {
       super(props);
       this.state = {
@@ -29,7 +25,7 @@ export default class Login extends Component {
         password: '',
       }
       
-      // For when we have user persistence
+      // Check if user is already authenticated
       Authenticator.userIsLoggedIn((result) => {
           if (result) {
               this.props.navigation.navigate("WeatherScreen");
@@ -39,6 +35,7 @@ export default class Login extends Component {
 
 
      static navigationOptions = () => ({
+        title: '',
         headerTransparent: true,
         headerTitleStyle: {color: '#000000',
         alignSelf: 'center',
@@ -58,7 +55,7 @@ export default class Login extends Component {
     loginWithGoogle() {
       Authenticator.loginWithGoogle()
         .then(() => {
-          this.props.navigation.navigate("Home");
+          this.props.navigation.navigate("SensitivitiesScreen");
         })
         .catch((error) => {
           console.log(error);
@@ -71,7 +68,7 @@ export default class Login extends Component {
       this.state.disableAutoLogin = true;
       Authenticator.login(email, password)
         .then(() => {
-          this.props.navigation.navigate("EditSensitivities");
+          this.props.navigation.navigate("SensitivitiesScreen");
         })
         .catch(() => {
           Alert.alert("Invalid Password");
@@ -117,7 +114,7 @@ export default class Login extends Component {
                 <Text style={{color: '#000000'}}> Sign In</Text>
               </Button>
 
-              {/* <Button block style={{marginTop:10}} onPress={() => {this.props.navigation.navigate("EditSensitivities")}}>
+              {/* <Button block style={{marginTop:10}} onPress={() => {this.props.navigation.navigate("SensitivitiesScreen")}}>
                 <Text> Sign In</Text>
               </Button> */}
 

@@ -26,6 +26,14 @@ export default class Signup extends Component {
     }
   }
 
+  static navigationOptions = () => ({
+    headerTransparent: true,
+    headerTitleStyle: {color: '#000000',
+    alignSelf: 'center',
+    textAlign: 'center',
+    flexGrow: 1}
+  });
+
   updateName(name) {
     this.setState({name});
   }
@@ -51,7 +59,7 @@ export default class Signup extends Component {
       Authenticator.register(email, password)
         .then(() => {
           Authenticator.updateDisplayName(name).then(() => {
-            this.props.navigation.navigate("EditSensitivities");
+            this.props.navigation.navigate("SensitivitiesScreen");
           }).catch(() => {
             Alert.alert("Error updating account details.");
           })

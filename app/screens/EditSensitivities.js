@@ -1,7 +1,10 @@
 import React, { Component } from "react";
 import { Platform, Text } from "react-native";
-
 import SwitchSelector from "react-native-switch-selector";
+
+import { Container, Item, Button, Icon } from "native-base";
+import { styles } from "../config/styles/styles";
+import User from "../models/User";
 
 const sensitivitiesScales = [
   { label: "No Effect", value: "0", activeColor: "#228B44" },
@@ -15,12 +18,6 @@ const pollenScales = [
   { label: "Affects Me", value: "1", activeColor: "#FF0000" }
 ];
 
-import { Container, Item, Button, Icon } from "native-base";
-
-import { styles } from "../config/styles/styles";
-
-import User from "../models/User";
-
 export default class EditSensitivities extends Component {
   constructor(props) {
     super(props);
@@ -31,8 +28,12 @@ export default class EditSensitivities extends Component {
       lat: "",
       lon: ""
     };
-    this.pollenRating = this.pollenRating.bind(this);
     this.state.user = new User();
+    Database.loadApplication().then(result => {
+      this.setState({
+        user: result[0]
+      });
+    });
   }
 
   static navigationOptions = () => ({
@@ -44,13 +45,7 @@ export default class EditSensitivities extends Component {
       textAlign: "center",
       flexGrow: 1
     },
-    headerRight: (
-      <Icon
-        name="settings"
-        size={28}
-        style={{ paddingRight: 20, color: "#FFFFFF" }}
-      />
-    )
+    headerLeft: null
   });
 
   componentDidMount() {
@@ -259,7 +254,7 @@ export default class EditSensitivities extends Component {
             backgroundColor: "transparent",
             borderColor: "#000000"
           }}
-          onPress={() => this.props.navigation.navigate("Weather")}
+          onPress={() => this.props.navigation.navigate("WeatherScreen")}
         >
           <Text
             style={{
@@ -274,5 +269,16 @@ export default class EditSensitivities extends Component {
         </Button>
       </Container>
     );
+  }
+
+  submitApplication() {
+    Database.StoreSensitivities(new User(this.state.user))
+      .then(() => {
+        Alert.alert(strings.successfullySaved);
+        this.props.navigation.navigate('WeatherScreen');
+      })
+      .catch(err => {
+        Alert.alert("Error Saving Application", err);
+      });
   }
 }

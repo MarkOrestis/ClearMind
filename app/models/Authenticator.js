@@ -1,5 +1,6 @@
 //import {AsyncStorage, (...) } from 'react-native'
 import firebase from 'react-native-firebase';
+import { GoogleSignin } from 'react-native-google-signin';
 
 
 
@@ -33,6 +34,7 @@ export class Authenticator {
   static userIsLoggedIn(result) {
       firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
+          console.log(user);
           result(true);
         } else {
           result(false);
@@ -59,7 +61,7 @@ export class Authenticator {
                   resolve();
               })
               .catch((error) => {
-                  // console.log(error);
+                  console.log(error);
                   reject();
               });
       });
@@ -89,6 +91,23 @@ export class Authenticator {
     //   .catch((error) => {
     //     reject();
     //   })
+    });
+  }
+
+  static updateDisplayName(name) {
+    return new Promise((resolve, reject) => {
+      var user = firebase.auth().currentUser;
+
+      user
+        .updateProfile({
+          displayName: name
+        })
+        .then(function() {
+          resolve();
+        })
+        .catch(function(error) {
+          reject(error);
+        });
     });
   }
   

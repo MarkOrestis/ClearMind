@@ -5,6 +5,7 @@ import {
   Text,
   StyleSheet,
   Image,
+  Platform,
   ActivityIndicator,
   FlatList
 } from "react-native";
@@ -21,20 +22,32 @@ export default class WeatherScreen extends Component {
   static navigationOptions = ({ navigation, screenProps }) => ({
     title: "Weather Conditions",
     headerTransparent: true,
-    headerTitleStyle: {color: '#000000',
-    alignSelf: 'center',
-    textAlign: 'center',
-    flexGrow: 1},
+    headerTitleStyle: {
+      color: "#000000",
+      alignSelf: "center",
+      textAlign: "center",
+      flexGrow: 1
+    },
     headerRight: (
       <Icon
         name="settings"
         size={28}
         style={{ paddingRight: 20 }}
         onPress={() => {
-          navigation.navigate("Settings");
+          navigation.navigate("SettingsScreen");
         }}
       />
-    )
+    ),
+    headerLeft: (
+      <Icon
+        name="settings"
+        size={28}
+        style={{display: 'none'}}
+        onPress={() => {
+          navigation.navigate("SettingsScreen");
+        }}
+      />
+    ),
   });
 
   constructor(props) {
@@ -218,7 +231,7 @@ export default class WeatherScreen extends Component {
     }
 
     return (
-      <View style={{ paddingTop: 80 }}>
+      <View style={Platform.select({ ios: { paddingTop: 80 }, android: {paddingTop: 50} })}>
         <CurrentCard location="Atlanta, GA" forecast={today} />
         <View style={styles.weatherViewStyle}>
           <Text style={styles.weatherDetails}>

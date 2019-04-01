@@ -16,19 +16,19 @@ export const RootStack = createStackNavigator(
     LoginScreen: {
         screen: LoginScreen,
     },
-    Signup: {
+    SignupScreen: {
       screen: Signup,
     },
-    EditSensitivities: {
+    SensitivitiesScreen: {
         screen: EditSensitivities,
     },
-    Weather: {
+    WeatherScreen: {
       screen: WeatherScreen,
     },
-    Settings: {
+    SettingsScreen: {
       screen: SettingsScreen,
     },
-    Notifications: {
+    NotificationsScreen: {
       screen: NotificationsScreen,
     }
   },
