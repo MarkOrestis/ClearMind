@@ -26,7 +26,6 @@ export class Database {
             const database = firebase.database();
             const userRef = database.ref("users/" + userId);
             userRef.set(user);
-            application.submittedDate = (new Date()).toString();
             resolve();
         });
     }
@@ -39,7 +38,7 @@ export class Database {
             userRef.once("value").then((userSnapshot) => {
                 if (userSnapshot.exists()) {
                     var user = new User(userSnapshot.val());
-                    user.id = userSnapshot.key;
+                    resolve(user);
                 }
                 else {
                     resolve(new User());

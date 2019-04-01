@@ -34,7 +34,6 @@ export class Authenticator {
   static userIsLoggedIn(result) {
       firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
-          console.log(user);
           result(true);
         } else {
           result(false);

@@ -1,9 +1,6 @@
 export default class User {
     constructor(obj) {
         if (obj == null) {
-            this.id = "";
-            this.firstName="";
-            this.lastName="";
             this.pressure = 0;
             this.light = 0;
             this.pollen = 0;
