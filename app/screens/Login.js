@@ -52,16 +52,16 @@ export default class Login extends Component {
       this.setState({password});
     }
 
-    loginWithGoogle() {
-      Authenticator.loginWithGoogle()
-        .then(() => {
-          this.props.navigation.navigate("SensitivitiesScreen");
-        })
-        .catch((error) => {
-          console.log(error);
-          Alert.alert("Error logging in with Google");
-        })
-    }
+    // loginWithGoogle() {
+    //   Authenticator.loginWithGoogle()
+    //     .then(() => {
+    //       this.props.navigation.navigate("SensitivitiesScreen");
+    //     })
+    //     .catch((error) => {
+    //       console.log(error);
+    //       Alert.alert("Error logging in with Google");
+    //     })
+    // }
   
     login() {
       const { email, password } = this.state;
@@ -121,18 +121,18 @@ export default class Login extends Component {
               <Text style={[colorStyles.primaryText, {textAlign:"center", marginTop:20}]} onPress={() => {this.props.navigation.navigate('Signup')}}>
                   Don't have an account? <Text style={{color:"#000000"}}>Sign Up</Text>
               </Text>
-              <Text style={{textAlign:"center", color:"#000000"}} onPress={() => {this.props.navigation.navigate('SignupScreen')}}>
+              <Text style={{paddingTop: 4, textAlign:"center", color:"#000000"}} onPress={() => {this.props.navigation.navigate('SignupScreen')}}>
                   Forgot Password?
               </Text>
 
-              <View style={{ flexDirection: 'row', justifyContent: 'center'}}>
-              {/* <Icon type="FontAwesome" name="google" size={12} /> */}
+              {/* <View style={{ flexDirection: 'row', justifyContent: 'center'}}>
+              <Icon type="FontAwesome" name="google" size={12} />
                 <TouchableOpacity onPress={() => {this.loginWithGoogle()}}>
                   <Text style={styles.googleSignin}>
                       Sign in with Google
                 </Text>
                 </TouchableOpacity>
-              </View>
+              </View> */}
               
             </View>
           </Content>

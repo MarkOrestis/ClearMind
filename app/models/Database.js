@@ -41,7 +41,7 @@ export class Database {
                     resolve([user]);
                 }
                 else {
-                    resolve(new User());
+                    resolve([new User()]);
                 }
             })
         })

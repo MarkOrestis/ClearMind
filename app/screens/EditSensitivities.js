@@ -32,13 +32,6 @@ export default class EditSensitivities extends Component {
       loading: true,
       width: ""
     };
-
-    // Database.loadSensitivities().then(result => {
-    //   console.log(result[0]);
-    //   this.setState({
-    //     user: result[0]
-    //   });
-    // });
   }
 
   static navigationOptions = () => ({
@@ -60,7 +53,7 @@ export default class EditSensitivities extends Component {
         console.log(result[0]);
         this.setState({
           user: result[0],
-          width: Dimensions.get('window').width - 100
+          width: Dimensions.get('window').width - 92
         });
         console.log(this.state.width);
         if (this.state.user.pollen > 0) {
