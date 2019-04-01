@@ -121,7 +121,7 @@ export default class Login extends Component {
               <Text style={[colorStyles.primaryText, {textAlign:"center", marginTop:20}]} onPress={() => {this.props.navigation.navigate('Signup')}}>
                   Don't have an account? <Text style={{color:"#000000"}}>Sign Up</Text>
               </Text>
-              <Text style={{textAlign:"center", color:"#000000"}} onPress={() => {this.props.navigation.navigate('Signup')}}>
+              <Text style={{textAlign:"center", color:"#000000"}} onPress={() => {this.props.navigation.navigate('SignupScreen')}}>
                   Forgot Password?
               </Text>
 
