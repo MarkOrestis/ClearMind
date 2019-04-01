@@ -38,7 +38,6 @@ export class Database {
             userRef.once("value").then((userSnapshot) => {
                 if (userSnapshot.exists()) {
                     var user = new User(userSnapshot.val());
-                    // console.log(user);
                     resolve([user]);
                 }
                 else {

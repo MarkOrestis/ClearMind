@@ -1,10 +1,11 @@
 import React, { Component } from "react";
 import { Alert, ActivityIndicator, Platform, Text, View } from "react-native";
-import SwitchSelector from "react-native-switch-selector";
+import SwitchSelector from '../components/SwitchSelector/SwitchSelector'
 
 import { Container, Item, Button, Icon } from "native-base";
 import { Database } from "../models/Database";
 import { styles } from "../config/styles/styles";
+import Dimensions from 'Dimensions';
 import User from "../models/User";
 
 const sensitivitiesScales = [
@@ -28,7 +29,8 @@ export default class EditSensitivities extends Component {
       pollen: false,
       lat: "",
       lon: "",
-      loading: true
+      loading: true,
+      width: ""
     };
 
     // Database.loadSensitivities().then(result => {
@@ -40,10 +42,11 @@ export default class EditSensitivities extends Component {
   }
 
   static navigationOptions = () => ({
-    title: "Sensitivities",
+    title: "Edit Sensitivities",
     headerTransparent: true,
     headerTitleStyle: {
       color: "#000000",
+      fontWeight: '200',
       alignSelf: "center",
       textAlign: "center",
       flexGrow: 1
@@ -57,7 +60,9 @@ export default class EditSensitivities extends Component {
         console.log(result[0]);
         this.setState({
           user: result[0],
+          width: Dimensions.get('window').width - 100
         });
+        console.log(this.state.width);
         if (this.state.user.pollen > 0) {
             this.state.pollen = true;
         } else {
@@ -125,7 +130,7 @@ export default class EditSensitivities extends Component {
   render() {
       if (this.state.loading) {
           return (
-            <View style={styles.container}><ActivityIndicator color='#4682b4' size="large" /></View>
+            <View style={{flex: 1, justifyContent: 'center', alignItems: 'center',}}><ActivityIndicator color='#4682b4' size="large" /></View>
           )
       } else {
         return (
@@ -146,7 +151,7 @@ export default class EditSensitivities extends Component {
                   textColor={"#000000"}
                   selectedColor={"#FFFFFF"}
                   height={26}
-                  width={275}
+                  width={this.state.width}
                   options={sensitivitiesScales}
                 />
               </Item>
@@ -165,7 +170,7 @@ export default class EditSensitivities extends Component {
                   textColor={"#000000"}
                   selectedColor={"#FFFFFF"}
                   height={30}
-                  width={275}
+                  width={this.state.width}
                   options={sensitivitiesScales}
                 />
               </Item>
@@ -185,7 +190,7 @@ export default class EditSensitivities extends Component {
                   textColor={"#000000"}
                   selectedColor={"#FFFFFF"}
                   height={30}
-                  width={275}
+                  width={this.state.width}
                   options={pollenScales}
                 />
               </Item>
@@ -204,7 +209,7 @@ export default class EditSensitivities extends Component {
                   textColor={"#000000"}
                   selectedColor={"#FFFFFF"}
                   height={30}
-                  width={275}
+                  width={this.state.width}
                   options={sensitivitiesScales}
                 />
               </Item>
@@ -223,7 +228,7 @@ export default class EditSensitivities extends Component {
                   textColor={"#000000"}
                   selectedColor={"#FFFFFF"}
                   height={30}
-                  width={275}
+                  width={this.state.width}
                   options={sensitivitiesScales}
                 />
               </Item>
@@ -242,7 +247,7 @@ export default class EditSensitivities extends Component {
                   textColor={"#000000"}
                   selectedColor={"#FFFFFF"}
                   height={30}
-                  width={275}
+                  width={this.state.width}
                   options={sensitivitiesScales}
                 />
               </Item>
@@ -261,7 +266,7 @@ export default class EditSensitivities extends Component {
                   textColor={"#000000"}
                   selectedColor={"#FFFFFF"}
                   height={30}
-                  width={275}
+                  width={this.state.width}
                   options={sensitivitiesScales}
                 />
               </Item>
