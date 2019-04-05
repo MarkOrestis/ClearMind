@@ -7,7 +7,8 @@ import {
   Image,
   Platform,
   ActivityIndicator,
-  FlatList
+  FlatList, 
+  Dimensions
 } from "react-native";
 import { Card, Divider } from "react-native-elements";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
@@ -18,6 +19,8 @@ import { BorderlessButton } from "react-native-gesture-handler";
 import Forecast from "../models/Forecast";
 import PredictionModel from '../models/PredictionModel';
 import { styles } from "../config/styles/styles";
+import User from "../models/User";
+import {Database} from "../models/Database";
 
 export default class WeatherScreen extends Component {
   static navigationOptions = ({ navigation, screenProps }) => ({
@@ -59,7 +62,7 @@ export default class WeatherScreen extends Component {
       loadingFiveDay: true,
       currentWeather: [],
       fiveDayWeather: [],
-      user = {}
+      user: {}
     };
   }
 
@@ -234,10 +237,13 @@ export default class WeatherScreen extends Component {
     );
     const fiveDay = [today, day2, day3, day4, day5];
 
-    const pred1 = new PredictionModel(user, today, day2);
-    const pred2 = new PredictionModel(user, day2, day3);
-    const pred3 = new PredictionModel(user, day3, day4);
-    const pred4 = new PredictionModel(user, day4, day5);
+    const pred1 = PredictionModel.forecast(this.state.user, today, day2);
+    const pred2 = PredictionModel.forecast(this.state.user, day2, day3);
+    const pred3 = PredictionModel.forecast(this.state.user, day3, day4);
+    const pred4 = PredictionModel.forecast(this.state.user, day4, day5);
+
+    console.log(day3.predictionToString(pred3));
+    //console.log(pred1);
 
 
     //Display scroll wheel while fetching data

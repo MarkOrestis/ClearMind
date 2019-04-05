@@ -1,18 +1,18 @@
-export class PredictionModel {
+export default class PredictionModel {
     static forecast(user, currentWeather, tomWeather) {
-        let pressureDiff = Math.abs(currentWeather.Pressure - tomWeather.Pressure);
+        let pressureDiff = Math.abs(currentWeather.pressure - tomWeather.pressure);
         let pressureSensitvity = pressureDiff * user.pressure;
 
-        let UVIndex = currentWeather.UVIndex;
+        let UVIndex = currentWeather.uv;
         let UVSensitivity = UVIndex * user.light;
 
 
-        let pollens = tomWeather.AirAndPollen;
-        let grass = pollens[0].Value
-        let mold = pollens[1].Value
-        let ragweed = pollens[2].Value
-        let tree = pollens[3].Value
-        let nextDayUVIndex = pollens[4].value;
+        //let pollens = tomWeather.AirAndPollen;
+        let grass = tomWeather.grass;
+        let mold = tomWeather.mold;
+        let ragweed = tomWeather.ragweed;
+        let tree = tomWeather.tree;
+        let nextDayUVIndex = tomWeather.uv;
 
         let grassSensitivity = grass * user.grass;
         let moldSensitivity = mold * user.mold;
@@ -23,6 +23,8 @@ export class PredictionModel {
         var light = 0;
         var pressure = 0;     
         var pollen = 0;
+
+        console.log(UVSensitivity);
         
         if (pressureSensitvity > 0) {
             if (pressureSensitvity >=18) {
@@ -49,6 +51,8 @@ export class PredictionModel {
                 light = 1;
             }
         }
+
+        return [pressure, light, pollen];
 
     }
 }
