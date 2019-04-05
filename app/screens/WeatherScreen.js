@@ -16,6 +16,7 @@ import CurrentCard from "../components/CurrentCard";
 import FiveDayForecast from "../components/FiveDayForecast";
 import { BorderlessButton } from "react-native-gesture-handler";
 import Forecast from "../models/Forecast";
+import PredictionModel from '../models/PredictionModel';
 import { styles } from "../config/styles/styles";
 
 export default class WeatherScreen extends Component {
@@ -57,9 +58,21 @@ export default class WeatherScreen extends Component {
       loadingCurr: true,
       loadingFiveDay: true,
       currentWeather: [],
-      fiveDayWeather: []
+      fiveDayWeather: [],
+      user = {}
     };
   }
+
+  componentWillMount() {
+    this.state.user = new User();
+    Database.loadSensitivities().then(result => {
+        console.log(result[0]);
+        this.setState({
+          user: result[0],
+          width: Dimensions.get('window').width - 92
+        });
+      });
+    }
 
   componentDidMount() {
     this.fetchCurrentConditions();
@@ -221,6 +234,12 @@ export default class WeatherScreen extends Component {
     );
     const fiveDay = [today, day2, day3, day4, day5];
 
+    const pred1 = new PredictionModel(user, today, day2);
+    const pred2 = new PredictionModel(user, day2, day3);
+    const pred3 = new PredictionModel(user, day3, day4);
+    const pred4 = new PredictionModel(user, day4, day5);
+
+
     //Display scroll wheel while fetching data
     if (this.state.loadingCurr || this.state.loadingFiveDay) {
       return (
@@ -239,13 +258,6 @@ export default class WeatherScreen extends Component {
           </Text>
         </View>
         <FiveDayForecast fiveDay={fiveDay} />
-        {/* <View style={{flexDirection:'row', alignItems: 'center', justifyContent: 'center'}}>
-              <Icon name='settings' size={24} onPress={() => this.props.navigation.navigate('Settings')}></Icon>
-              <Button 
-                title="Notification Settings"
-                onPress={() => this.props.navigation.navigate('Settings')}
-              /> 
-            </View>   */}
       </View>
     );
   }

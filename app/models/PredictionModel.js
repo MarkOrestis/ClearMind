@@ -1,6 +1,6 @@
 export class PredictionModel {
     static forecast(user, currentWeather, tomWeather) {
-        let pressureDiff = currentWeather.Pressure - tomWeather.Pressure;
+        let pressureDiff = Math.abs(currentWeather.Pressure - tomWeather.Pressure);
         let pressureSensitvity = pressureDiff * user.pressure;
 
         let UVIndex = currentWeather.UVIndex;
@@ -20,9 +20,9 @@ export class PredictionModel {
         let treeSensitivity = tree * user.tree;
         let lightNextDay = nextDayUVIndex * user.light;
 
-        let light = 0;
-        let pressure = 0;     
-        let pollen = 0;
+        var light = 0;
+        var pressure = 0;     
+        var pollen = 0;
         
         if (pressureSensitvity > 0) {
             if (pressureSensitvity >=18) {
@@ -49,11 +49,6 @@ export class PredictionModel {
                 light = 1;
             }
         }
-
-        
-
-        
-        
 
     }
 }
