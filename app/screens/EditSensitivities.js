@@ -461,7 +461,7 @@ export default class EditSensitivities extends Component {
     Database.storeSensitivities(new User(this.state.user))
       .then(() => {
         Alert.alert("Successfully Saved");
-        this.props.navigation.navigate("WeatherScreen");
+        this.props.navigation.navigate("WeatherScreen", {onRefresh: true});
       })
       .catch(err => {
         Alert.alert("Error Saving Application", JSON.stringify(err));

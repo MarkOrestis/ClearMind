@@ -39,6 +39,29 @@ export const styles = StyleSheet.create({
 		textAlign:"center",
 		color:"#FBBC05"
 	},
+	card:{
+		backgroundColor:'rgba(56, 172, 236, 1)',
+		borderWidth:0,
+		borderRadius:20,
+		justifyContent: 'center'
+	},
+	notes: {
+		fontSize: 18,
+		color:'#fff',
+	},
+	lowTemp: {
+		fontSize: 12,
+		color:'#fff',
+	},
+	viewStyle: {
+		flexDirection: 'row',
+		justifyContent: 'space-evenly'
+	},
+	column: {
+		flexDirection: 'column',
+		alignItems: 'center',
+		justifyContent: 'center'
+	}
     // loginForeground: {
 	// 	flex: 1,
 	// 	flexDirection: "column",

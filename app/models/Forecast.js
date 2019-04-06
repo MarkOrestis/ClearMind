@@ -84,11 +84,31 @@ export default class Forecast {
         } else if (prediction[1] == 2) {
             predictionStr += "Moderate hazard day for migraines \nwith UV index of " + this.uv + ".";
         }
+        // if (prediction[3] == 3) {
+        //     predictionStr += "Severe grass allergy warning \nwith grass pollen counts of " + this.grass + ".";
+        // } else if (prediction[3] == 2) {
+        //     predictionStr += "Moderate grass allergy warning \nwith grass pollen counts of " + this.grass + ".";
+        // }
+        // if (prediction[3] == 3 || prediction[4] == 3 || prediction[5] == 3 || prediction[6] == 3) {
+        //     predictionStr += "Severe allergy warning!";
+        // } else if (prediction[3] == 2 || prediction[4] == 2 || prediction[5] == 2 || prediction[6] == 2) {
+        //     predictionStr += "Moderate allergy warning!";
+        // }
         if (predictionStr == "") {
             predictionStr = "No significant changes in weather conditions! Have a great day!";
         }
-        console.log(prediction[1]);
 
         return predictionStr;
+    }
+
+    predictionDisplayIcon(prediction) {
+        console.log(prediction);
+        if (prediction[0] == 5 || prediction[1] == 3) {// || prediction[3] == 3 || prediction[4] == 3 || prediction[5] == 3 || prediction[6] == 3) {
+            return "alert";
+        } else if (prediction[0] == 3 || prediction[1] == 2 ) {//|| prediction[3] == 2 || prediction[4] == 2 || prediction[5] == 2 || prediction[6] == 2) {
+            return "emoticon-neutral-outline";
+        } else {
+            return "emoticon-happy-outline";
+        }
     }
 }

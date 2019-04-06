@@ -1,4 +1,18 @@
 export default class PredictionModel {
+
+    // Function to get the sensitivity for any pollen since they all use the same ranges
+    static getPollenSensitivity = function(sensitivity) {
+        if (sensitivity >= 6) {
+            return 3;
+        } else if (sensitivity >= 3) {
+            return 2;
+        } else if (sensitivity >= 2) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
     static forecast(user, currentWeather, tomWeather) {
         let pressureDiff = Math.abs(currentWeather.pressure - tomWeather.pressure);
         let pressureSensitvity = pressureDiff * user.pressure;
@@ -8,23 +22,25 @@ export default class PredictionModel {
 
 
         //let pollens = tomWeather.AirAndPollen;
-        let grass = tomWeather.grass;
-        let mold = tomWeather.mold;
-        let ragweed = tomWeather.ragweed;
-        let tree = tomWeather.tree;
+        let grassVal = tomWeather.grass;
+        let moldVal = tomWeather.mold;
+        let ragweedVal = tomWeather.ragweed;
+        let treeVal = tomWeather.tree;
         let nextDayUVIndex = tomWeather.uv;
 
-        let grassSensitivity = grass * user.grass;
-        let moldSensitivity = mold * user.mold;
-        let ragweedSensitivity = ragweed * user.ragweed;
-        let treeSensitivity = tree * user.tree;
+        let grassSensitivity = grassVal * user.grass;
+        let moldSensitivity = moldVal * user.mold;
+        let ragweedSensitivity = ragweedVal * user.ragweed;
+        let treeSensitivity = treeVal * user.tree;
         let lightNextDay = nextDayUVIndex * user.light;
 
         var light = 0;
         var pressure = 0;     
         var pollen = 0;
-
-        console.log(UVSensitivity);
+        var grass = this.getPollenSensitivity(grassSensitivity);
+        var mold = this.getPollenSensitivity(moldSensitivity);
+        var ragweed = this.getPollenSensitivity(ragweedSensitivity);
+        var tree = this.getPollenSensitivity(treeSensitivity);
         
         if (pressureSensitvity > 0) {
             if (pressureSensitvity >=18) {
@@ -52,7 +68,7 @@ export default class PredictionModel {
             }
         }
 
-        return [pressure, light, pollen];
+        return [pressure, light, pollen, grass, mold, ragweed, tree];
 
     }
 }

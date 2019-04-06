@@ -4,7 +4,9 @@ import { Card, Divider } from 'react-native-elements';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Forecast from '../models/Forecast';
-
+import User from "../models/User";
+import {Database} from "../models/Database";
+import PredictionModel from '../models/PredictionModel';
 
 export default class FiveDayForecast extends Component {
 
@@ -13,15 +15,28 @@ export default class FiveDayForecast extends Component {
 
     this.state = {
         fiveDay: [],
+        
+
     };
     
   }
 
   componentDidMount() {
     this.setState({
-        fiveDay: this.props.fiveDay
+        fiveDay: this.props.fiveDay,
     });
   };
+
+  componentWillMount() {
+    this.state.user = new User();
+    Database.loadSensitivities().then(result => {
+        console.log(result[0]);
+        this.setState({
+          user: result[0],
+          width: Dimensions.get('window').width - 92
+        });
+      });
+    }
 
     _onPressButton(myAlert) {
         Alert.alert(myAlert);
@@ -33,13 +48,13 @@ export default class FiveDayForecast extends Component {
         <Card containerStyle={styles.card}>
           <View style={styles.viewStyle}>
             {this.state.fiveDay.map((fiveDayInfo, i) => {
-              return <TouchableOpacity key={i} onPress={() => this._onPressButton(fiveDayInfo.toString())}>
+              return <TouchableOpacity key={i} onPress={() => this._onPressButton(fiveDayInfo.predictionToString(pred4))}>
                 <View style={styles.column}>
                   <Text style={styles.notes}>{fiveDayInfo.day}</Text>
                   <Icon name={fiveDayInfo.type} size={40} color='white'></Icon>
                   <Text style={styles.notes}>{fiveDayInfo.highTemp + '°'}</Text>
                   <Text style={styles.lowTemp}>{fiveDayInfo.lowTemp + '°'}</Text>
-                  <Icon name={fiveDayInfo.displayIcon(true)} size={40} color={fiveDayInfo.displayIcon(false)}></Icon>
+                  <Icon name={fiveDayInfo.predictionDisplayIcon(pred4)} size={40} color={fiveDayInfo.displayIcon(false)}></Icon>
                 </View>
               </TouchableOpacity>
             })}

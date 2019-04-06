@@ -8,7 +8,9 @@ import {
   Platform,
   ActivityIndicator,
   FlatList, 
-  Dimensions
+  Dimensions,
+  TouchableOpacity,
+  Alert
 } from "react-native";
 import { Card, Divider } from "react-native-elements";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
@@ -23,6 +25,7 @@ import User from "../models/User";
 import {Database} from "../models/Database";
 
 export default class WeatherScreen extends Component {
+
   static navigationOptions = ({ navigation, screenProps }) => ({
     title: "Weather Conditions",
     headerTransparent: true,
@@ -62,11 +65,23 @@ export default class WeatherScreen extends Component {
       loadingFiveDay: true,
       currentWeather: [],
       fiveDayWeather: [],
-      user: {}
+      user: {},
+      onRefresh: false
     };
+
+    shouldRefresh = false;
   }
 
   componentWillMount() {
+      this.getUser();
+  }
+
+  componentDidUpdate() {
+    this.getUser();
+  }
+
+  getUser() {
+    console.log("Got user");
     this.state.user = new User();
     Database.loadSensitivities().then(result => {
         console.log(result[0]);
@@ -75,11 +90,12 @@ export default class WeatherScreen extends Component {
           width: Dimensions.get('window').width - 92
         });
       });
-    }
+  }  
 
   componentDidMount() {
     this.fetchCurrentConditions();
     this.fetchFiveDay();
+    console.log("Mounted");
   }
 
   fetchCurrentConditions() {
@@ -111,6 +127,10 @@ export default class WeatherScreen extends Component {
         console.error(error);
       });
   }
+
+  _onPressButton(myAlert) {
+    Alert.alert(myAlert);
+  } 
 
   render() {
     //Current conditions from AccuWeather
@@ -237,14 +257,14 @@ export default class WeatherScreen extends Component {
     );
     const fiveDay = [today, day2, day3, day4, day5];
 
-    const pred1 = PredictionModel.forecast(this.state.user, today, day2);
-    const pred2 = PredictionModel.forecast(this.state.user, day2, day3);
-    const pred3 = PredictionModel.forecast(this.state.user, day3, day4);
-    const pred4 = PredictionModel.forecast(this.state.user, day4, day5);
 
-    console.log(day3.predictionToString(pred3));
-    //console.log(pred1);
-
+    //Need to recompute each time component loads
+    const pred1 = PredictionModel.forecast(this.state.user, today, today);
+    const pred2 = PredictionModel.forecast(this.state.user, today, day2);
+    const pred3 = PredictionModel.forecast(this.state.user, day2, day3);
+    const pred4 = PredictionModel.forecast(this.state.user, day3, day4);
+    const pred5 = PredictionModel.forecast(this.state.user, day4, day5);
+    const predictions = [pred1, pred2, pred3, pred4, pred5];
 
     //Display scroll wheel while fetching data
     if (this.state.loadingCurr || this.state.loadingFiveDay) {
@@ -263,7 +283,21 @@ export default class WeatherScreen extends Component {
             Select a day to see details.
           </Text>
         </View>
-        <FiveDayForecast fiveDay={fiveDay} />
+        <Card containerStyle={styles.card}>
+          <View style={styles.viewStyle}>
+            {fiveDay.map((fiveDayInfo, i) => {
+              return <TouchableOpacity key={i} onPress={() => this._onPressButton(fiveDayInfo.predictionToString(predictions[i]))}>
+                <View style={styles.column}>
+                  <Text style={styles.notes}>{fiveDayInfo.day}</Text>
+                  <Icon name={fiveDayInfo.type} size={40} color='white'></Icon>
+                  <Text style={styles.notes}>{fiveDayInfo.highTemp + '°'}</Text>
+                  <Text style={styles.lowTemp}>{fiveDayInfo.lowTemp + '°'}</Text>
+                  <Icon name={fiveDayInfo.predictionDisplayIcon(predictions[i])} size={40} color={fiveDayInfo.displayIcon(false)}></Icon>
+                </View>
+              </TouchableOpacity>
+            })}
+          </View>
+        </Card>
       </View>
     );
   }
