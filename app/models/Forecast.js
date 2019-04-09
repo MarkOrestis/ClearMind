@@ -75,24 +75,39 @@ export default class Forecast {
     predictionToString(prediction) {
         var predictionStr = "";
         if (prediction[0] == 5) {
-            predictionStr += "Severe hazard day for migraines \nwith pressure of " + this.pressure + " hPa.";
+            predictionStr += "Severe hazard day for migraines \nwith pressure of " + this.pressure + " hPa. ";
         } else if (prediction[0] == 3) {
-            predictionStr += "Moderate hazard day for migraines \nwith pressure of " + this.pressure + " hPa.";
+            predictionStr += "Moderate hazard day for migraines \nwith pressure of " + this.pressure + " hPa. ";
         } 
         if (prediction[1] == 3) {
-            predictionStr += "Severe hazard day for migraines \nwith UV index of " + this.uv + ".";
+            predictionStr += "Severe hazard day for migraines \nwith UV index of " + this.uv + ". ";
         } else if (prediction[1] == 2) {
-            predictionStr += "Moderate hazard day for migraines \nwith UV index of " + this.uv + ".";
+            predictionStr += "Moderate hazard day for migraines \nwith UV index of " + this.uv + ". ";
         }
-        // if (prediction[3] == 3) {
-        //     predictionStr += "Severe grass allergy warning \nwith grass pollen counts of " + this.grass + ".";
-        // } else if (prediction[3] == 2) {
-        //     predictionStr += "Moderate grass allergy warning \nwith grass pollen counts of " + this.grass + ".";
-        // }
+        if (prediction[3] == 3) {
+            predictionStr += "Severe grass allergy warning \nwith pollen counts of " + this.grass + ".";
+        } else if (prediction[3] == 2) {
+            predictionStr += "Moderate grass allergy warning \nwith pollen counts of " + this.grass + ".";
+        }
+        if (prediction[4] == 3) {
+            predictionStr += "Severe mold warning \nwith counts of " + this.mold + ".";
+        } else if (prediction[4] == 2) {
+            predictionStr += "Moderate mold warning \nwith counts of " + this.mold + ".";
+        }
+        if (prediction[5] == 3) {
+            predictionStr += "Severe ragweed allergy warning \nwith pollen counts of " + this.ragweed + ". ";
+        } else if (prediction[5] == 2) {
+            predictionStr += "Moderate ragweed allergy warning \nwith pollen counts of " + this.ragweed + ". ";
+        }
+        if (prediction[6] == 3) {
+            predictionStr += "Severe tree allergy warning \nwith pollen counts of " + this.tree + ". ";
+        } else if (prediction[6] == 2) {
+            predictionStr += "Moderate tree allergy warning \nwith pollen counts of " + this.tree + ". ";
+        }
         // if (prediction[3] == 3 || prediction[4] == 3 || prediction[5] == 3 || prediction[6] == 3) {
-        //     predictionStr += "Severe allergy warning!";
+        //     predictionStr += "Severe allergy warning!\n";
         // } else if (prediction[3] == 2 || prediction[4] == 2 || prediction[5] == 2 || prediction[6] == 2) {
-        //     predictionStr += "Moderate allergy warning!";
+        //     predictionStr += "Moderate allergy warning!\n";
         // }
         if (predictionStr == "") {
             predictionStr = "No significant changes in weather conditions! Have a great day!";
@@ -103,9 +118,9 @@ export default class Forecast {
 
     predictionDisplayIcon(prediction) {
         console.log(prediction);
-        if (prediction[0] == 5 || prediction[1] == 3) {// || prediction[3] == 3 || prediction[4] == 3 || prediction[5] == 3 || prediction[6] == 3) {
+        if (prediction[0] == 5 || prediction[1] == 3 || prediction[3] == 3 || prediction[4] == 3 || prediction[5] == 3 || prediction[6] == 3) {
             return "alert";
-        } else if (prediction[0] == 3 || prediction[1] == 2 ) {//|| prediction[3] == 2 || prediction[4] == 2 || prediction[5] == 2 || prediction[6] == 2) {
+        } else if (prediction[0] == 3 || prediction[1] == 2 || prediction[3] == 2 || prediction[4] == 2 || prediction[5] == 2 || prediction[6] == 2) {
             return "emoticon-neutral-outline";
         } else {
             return "emoticon-happy-outline";
