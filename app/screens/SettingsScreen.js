@@ -11,7 +11,7 @@ export default class SettingsScreen extends Component {
         <Button block style={{marginTop:10, backgroundColor: 'transparent'}} onPress={() => navigate("SensitivitiesScreen")}>
             <Text style={{color: '#000000', fontSize:20, backgroundColor: 'transparent'}}> Edit Sensitivities </Text>
         </Button>
-        <Button block style={{marginTop:10, backgroundColor: 'transparent'}} onPress={() => this.props.navigation.navigate("Notifications")}>
+        <Button block style={{marginTop:10, backgroundColor: 'transparent'}} onPress={() => this.props.navigation.navigate("NotificationsScreen")}>
           <Text style={{color: '#000000', fontSize:20, backgroundColor: 'transparent'}}> Edit Notifications </Text>
       </Button>
       </View>
