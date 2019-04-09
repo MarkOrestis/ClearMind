@@ -13,27 +13,27 @@
           "package_name": "Clear.mind4261"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "1012677208238-44p69o57hhc7keqmr08374cctjaljecu.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
           "current_key": "AIzaSyCEdBIbdjNQkHWWZwAMW2Dv7vixFSmgfQI"
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
-        },
-        "ads_service": {
-          "status": 2
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1012677208238-ng96g0o892fgsqqe6lfcpum74t0uek67.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1012677208238-idvnbciqvn48a602qbg79oh6tdq17cu9.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "ClearMind"
+              }
+            }
+          ]
         }
       }
     }

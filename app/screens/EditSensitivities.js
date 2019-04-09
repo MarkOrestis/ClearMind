@@ -2,6 +2,10 @@ import React, { Component } from "react";
 import { Alert, ActivityIndicator, Platform, Text, View } from "react-native";
 import SwitchSelector from '../components/SwitchSelector/SwitchSelector'
 
+import { AsyncStorage } from 'react-native';
+import firebase from 'react-native-firebase';
+import type {Notification, NotificationOpen} from 'react-native-firebase';
+
 import { Container, Item, Button, Icon } from "native-base";
 import { Database } from "../models/Database";
 import { styles } from "../config/styles/styles";
