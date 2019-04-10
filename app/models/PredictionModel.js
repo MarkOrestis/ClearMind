@@ -56,10 +56,10 @@ export default class PredictionModel {
         if (pressureSensitvity > 0) {
             if (pressureSensitvity >=18) {
                 // if > 3 chance of migraine is high
-                pressure = 5;
+                pressure = 3;
             } else if (pressureSensitvity >= 14) {
                 // if > 1, chance of migraine is moderate
-                pressure = 3;
+                pressure = 2;
             } else if(pressureSensitvity >= 10) {
                 // chance of migraine is low
                 pressure = 1;
@@ -79,7 +79,7 @@ export default class PredictionModel {
             }
         }
 
-        return [pressure, light, pollen, grass, mold, ragweed, tree];
+        return [pressure, light, grass, mold, ragweed, tree];
 
     }
 }
