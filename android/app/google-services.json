@@ -13,7 +13,48 @@
           "package_name": "Clear.mind4261"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "1012677208238-ng96g0o892fgsqqe6lfcpum74t0uek67.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCEdBIbdjNQkHWWZwAMW2Dv7vixFSmgfQI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1012677208238-ng96g0o892fgsqqe6lfcpum74t0uek67.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1012677208238-idvnbciqvn48a602qbg79oh6tdq17cu9.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "ClearMind"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1012677208238:android:5098f937a94e0f62",
+        "android_client_info": {
+          "package_name": "clear.mind4261"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1012677208238-ng96g0o892fgsqqe6lfcpum74t0uek67.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCEdBIbdjNQkHWWZwAMW2Dv7vixFSmgfQI"

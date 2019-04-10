@@ -1,4 +1,4 @@
-package Clear.mind4261;
+package clear.mind4261;
 
 import android.app.Application;
 
