@@ -84,8 +84,8 @@ export default class CurrentCard extends Component {
               <Text style={styles.notesHeaders}>TODAY</Text>
             </View>
             <View style={{flexDirection:'row', marginVertical: 20, width:110, justifyContent: 'space-between'}}>
-              <Text style={styles.temperature}>{this.state.forecast.currTemp + '°'}</Text>
-              <Icon name={this.state.forecast.type} size={50} color='white'></Icon>
+              <Text style={styles.temperature}>{"81" + '°'}</Text>
+              <Icon name={"weather-sunny"} size={50} color='white'></Icon>
             </View>
           </View>
 
