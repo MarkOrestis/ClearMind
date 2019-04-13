@@ -2,7 +2,7 @@
 
 export default class Forecast {
     constructor(day, type, currTemp, highTemp, lowTemp, pressure, humidity, mold, ragweed, grass, tree, aq, uv) {
-       this.day = day ? day.toString().substring(5, 10) : ""; //type ? type.toString() : ""
+       this.day = day ? day.toString().substring(5, 10) : ""; 
        this.type = this.typeToIcon(type); 
        this.currTemp = currTemp;
        this.highTemp = highTemp;
@@ -16,67 +16,26 @@ export default class Forecast {
        this.aq = aq;
        this.uv = uv;
 
-       this.alertFor = this.alertFor.bind(this);
-       this.predictionToString = this.predictionToString.bind(this);
-
     }
 
-    //Finish adding types
+    //Converts icon phrases to React Native vector icon names
     typeToIcon(myType) {
-        if (myType == "Sunny" || myType == "Intermittent Clouds" || myType == "Clear") {
+        if (myType == "Sunny" || myType == "Intermittent clouds" || myType == "Clear" || myType == "Hazy sunshine") {
             return "weather-sunny";
-        } else if (myType == "Cloudy") {
+        } else if (myType == "Cloudy" || myType == "Dreary" || myType == "Fog") {
             return "weather-cloudy";
         } else if (myType == "Mostly sunny" || myType == "Mostly cloudy" || myType == "Partly sunny") {
             return "weather-partlycloudy";
         } else if (myType == "Thunderstorms") {
             return "weather-lightning";
-        } else if (myType == "Showers" || myType == "Rain" || myType == "Mostly cloudy w/ Showers") {
+        } else if (myType == "Showers" || myType == "Rain" || myType == "Mostly cloudy w/ showers") {
             return "weather-rainy";   
         } else {
             return "weather-cloudy";
         }
     }
 
-    alertFor() {
-        //Returns whichever weather condition warrants an alert based on algorithm
-        //For now, returns pollen over 550 or pressure under 10 hPa
-        if (this.pollen > 1) { //prediction.pollen
-            return "pollen";
-        } else if (this.pressure < 10) {
-            return "pressure";
-        } else {
-            return "";
-        }
-    }
-
-    toString() {
-        if (this.alertFor() == "pollen") {
-            return "Hazard day for allergies \nwith pollen counts of " + this.tree + ".";
-        } else if (this.alertFor() == "pressure") {
-            return "Hazard day for migraines \nwith pressure of " + this.pressure + " hPa.";
-        } else {
-            return "No significant changes in weather conditions! Have a great day!";
-        }
-    }
-
-    displayIcon(forIcon) {
-        if (forIcon) {
-            if (this.alertFor() == "") {
-                return "emoticon-happy-outline";
-            } else {
-                return "alert";
-            }
-        } else {
-            if (this.alertFor() == "") {
-                return "black";
-            } else {
-                return "red";
-            }
-        }
-        
-    }
-
+    //Returns an array of strings aligning with the input prediction indices
     predictionToString(prediction) {
         var predictionArr = ["", "", "", "", "", ""];
         if (prediction[0] == 3) {
@@ -113,11 +72,11 @@ export default class Forecast {
         return predictionArr;
     }
 
+    //For the five day forecast emoticons
     predictionDisplayIcon(prediction) {
-        console.log(prediction);
-        if (prediction[0] == 5 || prediction[1] == 3 || prediction[3] == 3 || prediction[4] == 3 || prediction[5] == 3 || prediction[6] == 3) {
+        if (prediction[0] == 3 || prediction[1] == 3 || prediction[3] == 3 || prediction[4] == 3 || prediction[5] == 3 || prediction[6] == 3) {
             return "alert";
-        } else if (prediction[0] == 3 || prediction[1] == 2 || prediction[3] == 2 || prediction[4] == 2 || prediction[5] == 2 || prediction[6] == 2) {
+        } else if (prediction[0] == 2 || prediction[1] == 2 || prediction[3] == 2 || prediction[4] == 2 || prediction[5] == 2 || prediction[6] == 2) {
             return "emoticon-neutral-outline";
         } else {
             return "emoticon-happy-outline";

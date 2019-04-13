@@ -13,6 +13,7 @@ export default class CurrentCard extends Component {
       this.state = {
           location: '',
           forecast: {},
+          nextForecast: {},
           pressurePrediction: 0,
           lightPrediction: 0,
           grassPrediction: 0,
@@ -20,7 +21,6 @@ export default class CurrentCard extends Component {
           ragweedPrediction: 0,
           treePrediction: 0
       };
-      var predictions = [];
       
     }
 
@@ -28,6 +28,7 @@ export default class CurrentCard extends Component {
       this.setState({
           location: this.props.location,
           forecast: this.props.forecast,
+          nextForecast: this.props.nextForecast,
           pressurePrediction: this.props.pressurePrediction,
           lightPrediction: this.props.lightPrediction,
           grassPrediction: this.props.grassPrediction,
@@ -35,43 +36,53 @@ export default class CurrentCard extends Component {
           ragweedPrediction: this.props.ragweedPrediction,
           treePrediction: this.props.treePrediction
       });
-      //this.predictions = [this.state.pressurePrediction, this.state.lightPrediction, this.state.grassPrediction, this.state.moldPrediction, this.state.ragweedPrediction, this.state.treePrediction];
 
     };
 
     componentWillReceiveProps(nextProps) {
       
       this.setState({
-        forecast: nextProps.forecast
-        //predictions
+        nextForecast: nextProps.nextForecast,
+        pressurePrediction: nextProps.pressurePrediction,
+        lightPrediction: nextProps.lightPrediction,
+        grassPrediction: nextProps.grassPrediction,
+        moldPrediction: nextProps.moldPrediction,
+        ragweedPrediction: nextProps.ragweedPrediction,
+        treePrediction: nextProps.treePrediction
       });
       this.forceUpdate();
-      console.log(nextProps);
   }
 
     _onPressButton(myAlert) {
       Alert.alert(myAlert);
     }
-    //var predictions = [this.state.pressurePrediction, this.state.lightPrediction, this.state.grassPrediction, this.state.moldPrediction, this.state.ragweedPrediction, this.state.treePrediction];
-
 
     render() {
       
-      //Icons for the pressure, light, pollen iff they warrant an alert
-      //Not sure why predictions aren't working
+      //Icons for the pressure, light, pollen if they warrant an alert based on the prediction model
       var predictions = [this.state.pressurePrediction, this.state.lightPrediction, this.state.grassPrediction, this.state.moldPrediction, this.state.ragweedPrediction, this.state.treePrediction];
 
-      //var predictions = [1, 3, 1, 1, 3, 0];
-      var predictionArr = this.state.forecast.toString();
-
       var icons = predictions.map((item, i) => {
+          var predictionStr = "";
+          var finalStr = "";
+          if (i == 0 || i == 1) {
+            predictionStr = "hazard day for migraines!";
+          } else {
+            predictionStr = "hazard day for allergies!";
+          }
           if (item == 3) {
-            return <TouchableOpacity onPress={() => this._onPressButton(predictionArr)}>
+            finalStr = "Severe " + predictionStr;
+            return <TouchableOpacity onPress={() => this._onPressButton(finalStr)}>
             <Icon name='alert' size={20} color='black'></Icon>
           </TouchableOpacity>;
           }
+          if (item == 2) {
+            finalStr = "Moderate " + predictionStr;
+            return <TouchableOpacity onPress={() => this._onPressButton(finalStr)}>
+            <Icon name='emoticon-neutral-outline' size={20} color='black'></Icon>
+          </TouchableOpacity>;
+          }
       });
-      console.log(predictions);
 
       return (
         <Card containerStyle={styles.card}>
@@ -84,46 +95,46 @@ export default class CurrentCard extends Component {
               <Text style={styles.notesHeaders}>TODAY</Text>
             </View>
             <View style={{flexDirection:'row', marginVertical: 20, width:110, justifyContent: 'space-between'}}>
-              <Text style={styles.temperature}>{"81" + '°'}</Text>
-              <Icon name={"weather-sunny"} size={50} color='white'></Icon>
+              <Text style={styles.temperature}>{this.state.forecast.currTemp + '°'}</Text>
+              <Icon name={this.state.forecast.type} size={50} color='white'></Icon>
             </View>
           </View>
 
           <View style={{justifyContent: 'space-between', alignItems: 'center'}}>
-            <Text style={styles.notesHeaders}>SELECTED DAY</Text>
+            <Text style={styles.notesHeaders}>SELECTED DAY CONDITIONS - {this.state.nextForecast.day}</Text>
           </View>
   
           <Divider style={{ backgroundColor: '#dfe6e9', marginTop:6, marginBottom:2}} />
           
           <View style={{flexDirection:'row', justifyContent:'space-between'}}>
             <Text style={styles.notesHeaders}>HUMIDITY</Text>
-            <Text style={styles.notesHeaders}>PRESSURE</Text>
+            <Text style={styles.notesHeaders}>AIR QUALITY</Text>
           </View>
 
           <View style={{flexDirection:'row', justifyContent:'space-between'}}>
             <View style={{flexDirection:'row'}}>
-              <Text style={styles.notes}>{this.state.forecast.humidity + '%'}</Text>
+              <Text style={styles.notes}>{this.state.nextForecast.humidity + '%'}</Text>
             </View>
             <View style={{flexDirection:'row'}}>
-              {icons[0]}
-              <Text style={styles.notes}>{this.state.forecast.pressure + ' hPa'}</Text>
+              <Text style={styles.notes}>{this.state.nextForecast.aq}</Text>
             </View>
           </View>
 
           <Divider style={{ backgroundColor: '#dfe6e9', marginTop:6, marginBottom:2}} />
 
           <View style={{flexDirection:'row', justifyContent:'space-between'}}>
-            <Text style={styles.notesHeaders}>AIR QUALITY</Text>
+            <Text style={styles.notesHeaders}>PRESSURE</Text>
             <Text style={styles.notesHeaders}>UV INDEX</Text>
           </View>
 
           <View style={{flexDirection:'row', justifyContent:'space-between'}}>
             <View style={{flexDirection:'row'}}>
-              <Text style={styles.notes}>{this.state.forecast.aq}</Text>
+              <Text style={styles.notes}>{this.state.nextForecast.pressure + ' hPa'}</Text>
+              {icons[0]}
             </View>
             <View style={{flexDirection:'row'}}>
               {icons[1]}
-              <Text style={styles.notes}>{this.state.forecast.uv}</Text>
+              <Text style={styles.notes}>{this.state.nextForecast.uv}</Text>
             </View>
             
           </View>
@@ -137,12 +148,12 @@ export default class CurrentCard extends Component {
 
           <View style={{flexDirection:'row', justifyContent:'space-between'}}>
             <View style={{flexDirection:'row'}}>
-              <Text style={styles.notes}>{this.state.forecast.grass}</Text>
+              <Text style={styles.notes}>{this.state.nextForecast.grass}</Text>
               {icons[2]}
             </View>
             <View style={{flexDirection:'row'}}>
               {icons[5]}
-              <Text style={styles.notes}>{this.state.forecast.tree}</Text>
+              <Text style={styles.notes}>{this.state.nextForecast.tree}</Text>
             </View>
             
           </View>
@@ -156,12 +167,12 @@ export default class CurrentCard extends Component {
 
           <View style={{flexDirection:'row', justifyContent:'space-between'}}>
             <View style={{flexDirection:'row'}}>
-              <Text style={styles.notes}>{this.state.forecast.mold}</Text>
-              {icons[4]}
+              <Text style={styles.notes}>{this.state.nextForecast.mold}</Text>
+              {icons[3]}
             </View>
             <View style={{flexDirection:'row'}}>
-              {icons[5]}
-              <Text style={styles.notes}>{this.state.forecast.ragweed}</Text>
+              {icons[4]}
+              <Text style={styles.notes}>{this.state.nextForecast.ragweed}</Text>
             </View>
             
           </View>
