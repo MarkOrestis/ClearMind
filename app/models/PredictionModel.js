@@ -15,43 +15,29 @@ export default class PredictionModel {
     }
 
     static forecast(user, currentWeather, tomWeather) {
-        let pressureDiff = Math.abs(currentWeather.pressure - tomWeather.pressure);
-        let pressureSensitvity = pressureDiff * user.pressure;
 
-        let UVIndex = tomWeather.uv;
-        let UVSensitivity = UVIndex * user.light;
-
-
-        //let pollens = tomWeather.AirAndPollen;
         let grassVal = tomWeather.grass;
         let moldVal = tomWeather.mold;
         let ragweedVal = tomWeather.ragweed;
         let treeVal = tomWeather.tree;
-        let nextDayUVIndex = tomWeather.uv;
 
         let grassSensitivity = grassVal * user.grass;
         let moldSensitivity = moldVal * user.mold;
         let ragweedSensitivity = ragweedVal * user.ragweed;
         let treeSensitivity = treeVal * user.tree;
-        let lightNextDay = nextDayUVIndex * user.light;
 
         var light = 0;
         var pressure = 0;     
-        var pollen = 0;
         var mold = 0;
         var grass = this.getPollenSensitivity(grassSensitivity);
         var ragweed = this.getPollenSensitivity(ragweedSensitivity);
         var tree = this.getPollenSensitivity(treeSensitivity);
 
-        if (moldSensitivity > 0) {
-            if (moldSensitivity >= 2500) {
-                mold = 3;
-            } else if (moldSensitivity >= 2000) {
-                mold = 2;
-            } else if (moldSensitivity >= 1500) {
-                mold = 1;
-            }
-        }
+        let pressureDiff = Math.abs(currentWeather.pressure - tomWeather.pressure);
+        let pressureSensitvity = pressureDiff * user.pressure;
+
+        let UVIndex = tomWeather.uv;
+        let UVSensitivity = UVIndex * user.light;
         
         if (pressureSensitvity > 0) {
             if (pressureSensitvity >=18) {
@@ -76,6 +62,16 @@ export default class PredictionModel {
             } else if (UVSensitivity >= 10) {
                 // chance of migraine is low
                 light = 1;
+            }
+        }
+
+        if (moldSensitivity > 0) {
+            if (moldSensitivity >= 2500) {
+                mold = 3;
+            } else if (moldSensitivity >= 2000) {
+                mold = 2;
+            } else if (moldSensitivity >= 1500) {
+                mold = 1;
             }
         }
 

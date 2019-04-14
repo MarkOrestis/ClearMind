@@ -154,7 +154,7 @@ export default class WeatherScreen extends Component {
   }
 
   _onPressButton(ind, selectedPrediction, myAlert, selectedDay) {
-    console.log(ind);
+    //console.log(ind);
     let myAlertStr = "";
     for (i = 0; i< myAlert.length; i++) {
       myAlertStr += myAlert[i] + " ";
