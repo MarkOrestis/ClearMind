@@ -8,6 +8,7 @@ export default class User {
             this.mold = 0;
             this.weed = 0;
             this.grass = 0;
+            this.prediction = []
         } else {
             obj && Object.assign(this, obj);
         }

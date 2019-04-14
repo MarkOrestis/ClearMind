@@ -1,3 +1,5 @@
+import { Database } from "./Database";
+
 //import React, { Component } from "react";
 
 export default class Forecast {
@@ -114,7 +116,7 @@ export default class Forecast {
     }
 
     predictionDisplayIcon(prediction) {
-        console.log(prediction);
+        // console.log(prediction);
         if (prediction[0] == 5 || prediction[1] == 3 || prediction[3] == 3 || prediction[4] == 3 || prediction[5] == 3 || prediction[6] == 3) {
             return "alert";
         } else if (prediction[0] == 3 || prediction[1] == 2 || prediction[3] == 2 || prediction[4] == 2 || prediction[5] == 2 || prediction[6] == 2) {

@@ -34,6 +34,12 @@ export const styles = StyleSheet.create({
 		marginTop: 25,
 		marginBottom: 0,
 	},
+	userFeedbackText: {
+		textAlign:"center",
+		marginTop: 10,
+		marginBottom: 8,
+		fontSize:18
+	},
 	googleSignin: {
 		marginTop: 20,
 		textAlign:"center",
@@ -44,6 +50,15 @@ export const styles = StyleSheet.create({
 		borderWidth:0,
 		borderRadius:20,
 		justifyContent: 'center'
+	},
+	feedbackView: {
+		flexDirection: 'row',
+		justifyContent: 'space-around',
+		paddingLeft: 110,
+		paddingRight: 110
+	},
+	feedbackEmoji: {
+		flexDirection:'column'
 	},
 	notes: {
 		fontSize: 18,
@@ -62,28 +77,4 @@ export const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'center'
 	}
-    // loginForeground: {
-	// 	flex: 1,
-	// 	flexDirection: "column",
-	// 	alignItems: "center",
-	// 	justifyContent: "center",
-	// 	paddingLeft: 10,
-	// 	paddingRight: 10,
-	// },
-	// TitleContainer: {
-	// 	flex: 1,
-	// 	flexDirection: 'column',
-	// 	alignItems: 'center',
-	// 	justifyContent: 'center',
-	// 	paddingTop: 0,
-	// },
-	// TitleHeader: {
-
-	// },
-	// TitleName: {
-	// 	color: '#FFFFFF',
-	// 	fontWeight: '600',
-	// 	fontSize: 20,
-	// 	paddingTop: 8
-	// },
 });
