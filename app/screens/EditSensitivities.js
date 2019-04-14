@@ -134,7 +134,7 @@ export default class EditSensitivities extends Component {
             <Container
               style={Platform.select({ ios: { paddingTop: 20 }, android: {} })}
             >
-              <Item style={{ paddingBottom: 4, paddingTop: 75 }}>
+              <Item style={{ paddingBottom: 8, paddingTop: 75 }}>
                 <Text style={{ fontWeight: "bold", fontSize: 16, paddingRight: 10 }}>
                   {" "}
                   Pressure
@@ -153,8 +153,8 @@ export default class EditSensitivities extends Component {
                 />
               </Item>
       
-              <Item style={{ padding: 4 }}>
-                <Text style={{ fontWeight: "bold", fontSize: 16, paddingRight: 36 }}>
+              <Item style={{ padding: 8 }}>
+                <Text style={{ fontWeight: "bold", fontSize: 16, paddingRight: 34 }}>
                   {" "}
                   Light
                 </Text>
@@ -172,7 +172,7 @@ export default class EditSensitivities extends Component {
                 />
               </Item>
       
-              <Item style={{ padding: 4 }}>
+              <Item style={{ padding: 8 }}>
                 <Text style={{ fontWeight: "bold", fontSize: 16, paddingRight: 28 }}>
                   {" "}
                   Pollen
@@ -192,7 +192,7 @@ export default class EditSensitivities extends Component {
                 />
               </Item>
       
-              <Item style={this.state.pollen ? { padding: 4 } : { display: "none" }}>
+              <Item style={this.state.pollen ? { padding: 8 } : { display: "none" }}>
                 <Text style={{ fontWeight: "bold", fontSize: 16, paddingRight: 31 }}>
                   {" "}
                   Grass
@@ -211,7 +211,7 @@ export default class EditSensitivities extends Component {
                 />
               </Item>
       
-              <Item style={this.state.pollen ? { padding: 4 } : { display: "none" }}>
+              <Item style={this.state.pollen ? { padding: 8 } : { display: "none" }}>
                 <Text style={{ fontWeight: "bold", fontSize: 16, paddingRight: 40 }}>
                   {" "}
                   Tree
@@ -230,7 +230,7 @@ export default class EditSensitivities extends Component {
                 />
               </Item>
       
-              <Item style={this.state.pollen ? { padding: 4 } : { display: "none" }}>
+              <Item style={this.state.pollen ? { padding: 8 } : { display: "none" }}>
                 <Text style={{ fontWeight: "bold", fontSize: 16, paddingRight: 36 }}>
                   {" "}
                   Mold
@@ -249,7 +249,7 @@ export default class EditSensitivities extends Component {
                 />
               </Item>
       
-              <Item style={this.state.pollen ? { padding: 4 } : { display: "none" }}>
+              <Item style={this.state.pollen ? { padding: 8 } : { display: "none" }}>
                 <Text style={{ fontWeight: "bold", fontSize: 16, paddingRight: 32 }}>
                   {" "}
                   Weed
@@ -317,6 +317,8 @@ export default class EditSensitivities extends Component {
     //         options={sensitivitiesScales}
     //       />
     //     </Item>
+
+
 
     //     <Item style={{ padding: 4 }}>
     //       <Text style={{ fontWeight: "bold", fontSize: 16, paddingRight: 36 }}>

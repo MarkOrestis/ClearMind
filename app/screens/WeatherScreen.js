@@ -13,7 +13,7 @@ import {
   Alert
 } from "react-native";
 import { Card, Divider } from "react-native-elements";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
+import FAIcon from 'react-native-vector-icons/FontAwesome';
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import CurrentCard from "../components/CurrentCard";
 import FiveDayForecast from "../components/FiveDayForecast";
@@ -72,6 +72,8 @@ export default class WeatherScreen extends Component {
       currDay: {},
       selected: false,
       currPrediction: [],
+      feedback: [],
+      feedbackExists: false,
       index: 0
     };
 
@@ -81,6 +83,7 @@ export default class WeatherScreen extends Component {
 
   componentWillMount() {
       this.getUser();
+      this.hasLeftFeedback();
   }
 
   componentDidUpdate() {
@@ -102,6 +105,24 @@ export default class WeatherScreen extends Component {
         });
       });
   }  
+
+  hasLeftFeedback() {
+    Database.dailyFeedbackExist()
+    .then(() => {
+      this.state.feedbackExists = true;
+    })
+    .catch(() => {
+      this.state.feedbackExists = false;
+    });
+  }
+
+  renderFooter() {
+    if (this.state.feedbackExists) {
+
+    } else {
+      
+    }
+  }
 
   componentDidMount() {
     this.fetchCurrentConditions();
@@ -171,6 +192,10 @@ export default class WeatherScreen extends Component {
     });
     this.forceUpdate();
   } 
+
+  // isFeedbackVisible() {
+
+  // }
 
   render() {
     //Current conditions from AccuWeather
@@ -304,6 +329,8 @@ export default class WeatherScreen extends Component {
     const pred5 = PredictionModel.forecast(this.state.user, day4, day5);
     const predictions = [pred1, pred2, pred3, pred4, pred5];
 
+    Database.storeSensitivitiesPrediction(predictions);
+
     //Change the display to the selected day if one has been selected
     let displayDay = today;
     if (this.state.selected) {
@@ -330,11 +357,6 @@ export default class WeatherScreen extends Component {
     return (
       <View style={Platform.select({ ios: { paddingTop: 80 }, android: {paddingTop: 50} })}>
         <CurrentCard location="Atlanta, GA" forecast={today} nextForecast={displayDay} pressurePrediction={displayPrediction[0]} lightPrediction={displayPrediction[1]} grassPrediction={displayPrediction[2]} moldPrediction={displayPrediction[3]} ragweedPrediction={displayPrediction[4]} treePrediction={displayPrediction[5]}/>
-        <View style={styles.weatherViewStyle}>
-          <Text style={styles.weatherDetails}>
-            Select a day to see details.
-          </Text>
-        </View>
         <Card containerStyle={styles.card}>
           <View style={styles.viewStyle}>
             {fiveDay.map((fiveDayInfo, i) => {
@@ -350,6 +372,18 @@ export default class WeatherScreen extends Component {
             })}
           </View>
         </Card>
+
+        <View>
+        {/* <View style={{display: 'none'}}></View> */}
+            <Text style={styles.userFeedbackText} >How are you feeling today?</Text>
+            <View style={styles.feedbackView}>
+              <FAIcon name='thumbs-o-up' style={styles.feedbackEmoji} size={50} color='green' onPress={() => {this.state.feedback = ["good"]; Database.storeDailyFeedback(this.state.feedback)}}/>
+
+              <FAIcon name='thumbs-o-down' style={styles.feedbackEmoji} size={50} color='red' onPress={() => {this.state.feedback = ["headache", "migraine"]; Database.storeDailyFeedback(this.state.feedback)}}/>
+            </View>
+
+        </View> 
+
       </View>
     );
   }
