@@ -73,7 +73,8 @@ export default class WeatherScreen extends Component {
       selected: false,
       currPrediction: [],
       feedback: [],
-      feedbackExists: false
+      feedbackExists: false,
+      index: 0
     };
 
     this.myText = "";
@@ -92,13 +93,12 @@ export default class WeatherScreen extends Component {
   componentWillReceiveProps(nextProps) {
       this.getUser();
       this.setState({ onRefresh: true });
+      this.forceUpdate();
   }
 
   getUser() {
-    console.log("Got user");
     this.state.user = new User();
     Database.loadSensitivities().then(result => {
-        console.log(result[0]);
         this.setState({
           user: result[0],
           width: Dimensions.get('window').width - 92
@@ -128,7 +128,6 @@ export default class WeatherScreen extends Component {
     this.fetchCurrentConditions();
     this.fetchFiveDay();
     this.fetchHumidityAndPressure();
-    console.log("Mounted");
   }
 
   fetchCurrentConditions() {
@@ -175,7 +174,8 @@ export default class WeatherScreen extends Component {
       });
   }
 
-  _onPressButton(selectedPrediction, myAlert, selectedDay) {
+  _onPressButton(ind, selectedPrediction, myAlert, selectedDay) {
+    console.log(ind);
     let myAlertStr = "";
     for (i = 0; i< myAlert.length; i++) {
       myAlertStr += myAlert[i] + " ";
@@ -187,9 +187,9 @@ export default class WeatherScreen extends Component {
     this.setState({
         currDay: selectedDay,
         selected: true,
-        currPrediction: selectedPrediction
+        currPrediction: selectedPrediction,
+        index: ind
     });
-    console.log(this.state.currDay);
     this.forceUpdate();
   } 
 
@@ -199,17 +199,8 @@ export default class WeatherScreen extends Component {
 
   render() {
     //Current conditions from AccuWeather
-    const myText = this.state.currentWeather.map(item => {
-      return item.WeatherText;
-    });
     const myTemp = this.state.currentWeather.map(item => {
       return item.Temperature.Imperial.Value;
-    });
-    const myPressure = this.state.currentWeather.map(item => {
-      return item.Pressure.Imperial.Value;
-    });
-    const myHumidity = this.state.currentWeather.map(item => {
-      return item.RelativeHumidity;
     });
 
     //Five day forecast info
@@ -346,10 +337,7 @@ export default class WeatherScreen extends Component {
       displayDay = this.state.currDay;
     }
 
-    let displayPrediction = pred1;
-    if (this.state.selected) {
-      displayPrediction = this.state.currPrediction;
-    }
+    let displayPrediction = predictions[this.state.index];
     
 
     //Display scroll wheel while fetching data
@@ -366,22 +354,19 @@ export default class WeatherScreen extends Component {
       );
     }
 
-    console.log(this.state.currDay);
-
     return (
       <View style={Platform.select({ ios: { paddingTop: 80 }, android: {paddingTop: 50} })}>
-        <CurrentCard location="Atlanta, GA" forecast={displayDay} pressurePrediction={displayPrediction[0]} lightPrediction={displayPrediction[1]} grassPrediction={displayPrediction[2]} moldPrediction={displayPrediction[3]} ragweedPrediction={displayPrediction[4]} treePrediction={displayPrediction[5]}/>
-
+        <CurrentCard location="Atlanta, GA" forecast={today} nextForecast={displayDay} pressurePrediction={displayPrediction[0]} lightPrediction={displayPrediction[1]} grassPrediction={displayPrediction[2]} moldPrediction={displayPrediction[3]} ragweedPrediction={displayPrediction[4]} treePrediction={displayPrediction[5]}/>
         <Card containerStyle={styles.card}>
           <View style={styles.viewStyle}>
             {fiveDay.map((fiveDayInfo, i) => {
-              return <TouchableOpacity key={i} onPress={() => this._onPressButton(predictions[i], fiveDayInfo.predictionToString(predictions[i]), new Forecast(fiveDayInfo.day, fiveDayInfo.type, fiveDayInfo.currTemp, fiveDayInfo.highTemp, fiveDayInfo.lowTemp, fiveDayInfo.pressure, fiveDayInfo.humidity, fiveDayInfo.mold, fiveDayInfo.ragweed, fiveDayInfo.grass, fiveDayInfo.tree, fiveDayInfo.aq, fiveDayInfo.uv))}>
+              return <TouchableOpacity key={i} onPress={() => this._onPressButton(i, predictions[i], fiveDayInfo.predictionToString(predictions[i]), new Forecast(dates[i], fiveDayInfo.type, fiveDayInfo.currTemp, fiveDayInfo.highTemp, fiveDayInfo.lowTemp, fiveDayInfo.pressure, fiveDayInfo.humidity, fiveDayInfo.mold, fiveDayInfo.ragweed, fiveDayInfo.grass, fiveDayInfo.tree, fiveDayInfo.aq, fiveDayInfo.uv))}>
                 <View style={styles.column}>
                   <Text style={styles.notes}>{fiveDayInfo.day}</Text>
                   <Icon name={fiveDayInfo.type} size={40} color='white'></Icon>
                   <Text style={styles.notes}>{fiveDayInfo.highTemp + '°'}</Text>
                   <Text style={styles.lowTemp}>{fiveDayInfo.lowTemp + '°'}</Text>
-                  <Icon name={fiveDayInfo.predictionDisplayIcon(predictions[i])} size={40} color={fiveDayInfo.displayIcon(false)}></Icon>
+                  <Icon name={fiveDayInfo.predictionDisplayIcon(predictions[i])} size={40} color='black'></Icon>
                 </View>
               </TouchableOpacity>
             })}
