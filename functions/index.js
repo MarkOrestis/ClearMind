@@ -25,6 +25,7 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 admin.initializeApp();
 
+
 /**
  * Triggers when a user gets a new follower and sends a notification.
  *
