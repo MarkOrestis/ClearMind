@@ -4,7 +4,7 @@ import SwitchSelector from '../components/SwitchSelector/SwitchSelector'
 
 import { AsyncStorage } from 'react-native';
 import firebase from 'react-native-firebase';
-import type {Notification, NotificationOpen} from 'react-native-firebase';
+import {Notification, NotificationOpen} from 'react-native-firebase';
 
 import { Container, Item, Button, Icon } from "native-base";
 import { Database } from "../models/Database";
@@ -462,12 +462,12 @@ export default class EditSensitivities extends Component {
   }
 
   // Saves the messaging device token to the datastore.
-function saveMessagingDeviceToken() {
+saveMessagingDeviceToken() {
   firebase.messaging().getToken().then(function(currentToken) {
     if (currentToken) {
       console.log('Got FCM device token:', currentToken);
       // Saving the Device Token to the datastore.
-      firebase.database().ref('users/' + this.currentUid + '/notificationTokens/' + currentToken).set(true);
+      firebase.database().ref('users/' + Database.getUserId() + '/notificationTokens/' + currentToken).set(true);
     } else {
       // Need to request permissions to show notifications.
       requestNotificationsPermissions();
@@ -478,7 +478,7 @@ function saveMessagingDeviceToken() {
 }
 
 // Requests permissions to show notifications.
-function requestNotificationsPermissions() {
+requestNotificationsPermissions() {
   console.log('Requesting notifications permission...');
   firebase.messaging().requestPermission().then(function() {
     // Notification permission granted.
