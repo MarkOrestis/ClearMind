@@ -13,6 +13,13 @@ export default class CurrentCard extends Component {
       this.state = {
           location: '',
           forecast: {},
+          nextForecast: {},
+          pressurePrediction: 0,
+          lightPrediction: 0,
+          grassPrediction: 0,
+          moldPrediction: 0,
+          ragweedPrediction: 0,
+          treePrediction: 0
       };
       
     }
@@ -20,9 +27,31 @@ export default class CurrentCard extends Component {
     componentDidMount() {
       this.setState({
           location: this.props.location,
-          forecast: this.props.forecast
+          forecast: this.props.forecast,
+          nextForecast: this.props.nextForecast,
+          pressurePrediction: this.props.pressurePrediction,
+          lightPrediction: this.props.lightPrediction,
+          grassPrediction: this.props.grassPrediction,
+          moldPrediction: this.props.moldPrediction,
+          ragweedPrediction: this.props.ragweedPrediction,
+          treePrediction: this.props.treePrediction
       });
+
     };
+
+    componentWillReceiveProps(nextProps) {
+      
+      this.setState({
+        nextForecast: nextProps.nextForecast,
+        pressurePrediction: nextProps.pressurePrediction,
+        lightPrediction: nextProps.lightPrediction,
+        grassPrediction: nextProps.grassPrediction,
+        moldPrediction: nextProps.moldPrediction,
+        ragweedPrediction: nextProps.ragweedPrediction,
+        treePrediction: nextProps.treePrediction
+      });
+      this.forceUpdate();
+  }
 
     _onPressButton(myAlert) {
       Alert.alert(myAlert);
@@ -30,26 +59,30 @@ export default class CurrentCard extends Component {
 
     render() {
       
-      //Icons for the chance of rain, pressure, pollen, and humidity respectively
-      //If they warrant an alert
-      var icons = [];
-      for (i = 0; i<4; i++) {
-          icons[i] = <Text>{''}</Text>
-      }
+      //Icons for the pressure, light, pollen if they warrant an alert based on the prediction model
+      var predictions = [this.state.pressurePrediction, this.state.lightPrediction, this.state.grassPrediction, this.state.moldPrediction, this.state.ragweedPrediction, this.state.treePrediction];
 
-      const alert = <TouchableOpacity onPress={() => this._onPressButton(this.state.forecast.toString())}>
-          <Icon name='alert' size={20} color='red'></Icon>
-        </TouchableOpacity>;
-      // if (this.state.forecast.alertFor == 'pollen') {
-      //   icons[2] = alert;
-      // } else if (this.state.forecast.alertFor == 'pressure') {
-      //   icons[1] = alert;
-      // }
-      if (this.state.forecast.pollen > 550) {
-        icons[2] = alert;
-      } else if (this.state.forecast.pressure < 10) {
-        icons[1] = alert;
-      }
+      var icons = predictions.map((item, i) => {
+          var predictionStr = "";
+          var finalStr = "";
+          if (i == 0 || i == 1) {
+            predictionStr = "hazard day for migraines!";
+          } else {
+            predictionStr = "hazard day for allergies!";
+          }
+          if (item == 3) {
+            finalStr = "Severe " + predictionStr;
+            return <TouchableOpacity onPress={() => this._onPressButton(finalStr)}>
+            <Icon name='alert' size={20} color='black'></Icon>
+          </TouchableOpacity>;
+          }
+          if (item == 2) {
+            finalStr = "Moderate " + predictionStr;
+            return <TouchableOpacity onPress={() => this._onPressButton(finalStr)}>
+            <Icon name='emoticon-neutral-outline' size={20} color='black'></Icon>
+          </TouchableOpacity>;
+          }
+      });
 
       return (
         <Card containerStyle={styles.card}>
@@ -58,45 +91,50 @@ export default class CurrentCard extends Component {
               <FontAwesome name='location-arrow' size={24} color='white'></FontAwesome>
               <Text style={styles.location}>{this.state.location}</Text>
             </View>
+            <View>
+              <Text style={styles.notesHeaders}>TODAY</Text>
+            </View>
             <View style={{flexDirection:'row', marginVertical: 20, width:110, justifyContent: 'space-between'}}>
               <Text style={styles.temperature}>{this.state.forecast.currTemp + '°'}</Text>
               <Icon name={this.state.forecast.type} size={50} color='white'></Icon>
             </View>
+          </View>
+
+          <View style={{justifyContent: 'space-between', alignItems: 'center'}}>
+            <Text style={styles.notesHeaders}>SELECTED DAY CONDITIONS - {this.state.nextForecast.day}</Text>
           </View>
   
           <Divider style={{ backgroundColor: '#dfe6e9', marginTop:6, marginBottom:2}} />
           
           <View style={{flexDirection:'row', justifyContent:'space-between'}}>
             <Text style={styles.notesHeaders}>HUMIDITY</Text>
-            <Text style={styles.notesHeaders}>PRESSURE</Text>
+            <Text style={styles.notesHeaders}>AIR QUALITY</Text>
           </View>
 
           <View style={{flexDirection:'row', justifyContent:'space-between'}}>
             <View style={{flexDirection:'row'}}>
-              <Text style={styles.notes}>{this.state.forecast.humidity + '%'}</Text>
-              {icons[0]}
+              <Text style={styles.notes}>{this.state.nextForecast.humidity + '%'}</Text>
             </View>
             <View style={{flexDirection:'row'}}>
-              {icons[1]}
-              <Text style={styles.notes}>{this.state.forecast.pressure + ' hPa'}</Text>
+              <Text style={styles.notes}>{this.state.nextForecast.aq}</Text>
             </View>
           </View>
 
           <Divider style={{ backgroundColor: '#dfe6e9', marginTop:6, marginBottom:2}} />
-          
+
           <View style={{flexDirection:'row', justifyContent:'space-between'}}>
-            <Text style={styles.notesHeaders}>AIR QUALITY</Text>
+            <Text style={styles.notesHeaders}>PRESSURE</Text>
             <Text style={styles.notesHeaders}>UV INDEX</Text>
           </View>
 
           <View style={{flexDirection:'row', justifyContent:'space-between'}}>
             <View style={{flexDirection:'row'}}>
-              <Text style={styles.notes}>{this.state.forecast.aq}</Text>
-              {icons[2]}
+              <Text style={styles.notes}>{this.state.nextForecast.pressure + ' hPa'}</Text>
+              {icons[0]}
             </View>
             <View style={{flexDirection:'row'}}>
-              {icons[3]}
-              <Text style={styles.notes}>{this.state.forecast.uv}</Text>
+              {icons[1]}
+              <Text style={styles.notes}>{this.state.nextForecast.uv}</Text>
             </View>
             
           </View>
@@ -110,12 +148,12 @@ export default class CurrentCard extends Component {
 
           <View style={{flexDirection:'row', justifyContent:'space-between'}}>
             <View style={{flexDirection:'row'}}>
-              <Text style={styles.notes}>{this.state.forecast.grass}</Text>
+              <Text style={styles.notes}>{this.state.nextForecast.grass}</Text>
               {icons[2]}
             </View>
             <View style={{flexDirection:'row'}}>
-              {icons[3]}
-              <Text style={styles.notes}>{this.state.forecast.tree}</Text>
+              {icons[5]}
+              <Text style={styles.notes}>{this.state.nextForecast.tree}</Text>
             </View>
             
           </View>
@@ -129,15 +167,17 @@ export default class CurrentCard extends Component {
 
           <View style={{flexDirection:'row', justifyContent:'space-between'}}>
             <View style={{flexDirection:'row'}}>
-              <Text style={styles.notes}>{this.state.forecast.mold}</Text>
-              {icons[2]}
+              <Text style={styles.notes}>{this.state.nextForecast.mold}</Text>
+              {icons[3]}
             </View>
             <View style={{flexDirection:'row'}}>
-              {icons[3]}
-              <Text style={styles.notes}>{this.state.forecast.ragweed}</Text>
+              {icons[4]}
+              <Text style={styles.notes}>{this.state.nextForecast.ragweed}</Text>
             </View>
             
           </View>
+          <Divider style={{ backgroundColor: '#dfe6e9', marginTop:6, marginBottom:2}} />
+          
         </Card>
       );
     }

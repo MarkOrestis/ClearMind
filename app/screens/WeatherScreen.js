@@ -63,13 +63,20 @@ export default class WeatherScreen extends Component {
     this.state = {
       loadingCurr: true,
       loadingFiveDay: true,
+      loadingPressure: true,
       currentWeather: [],
       fiveDayWeather: [],
+      pressureFiveDayWeather: [],
       user: {},
-      onRefresh: false
+      onRefresh: false,
+      currDay: {},
+      selected: false,
+      currPrediction: [],
+      index: 0
     };
 
-    shouldRefresh = false;
+    this.myText = "";
+
   }
 
   componentWillMount() {
@@ -77,14 +84,18 @@ export default class WeatherScreen extends Component {
   }
 
   componentDidUpdate() {
-    this.getUser();
+    console.log(this.state.onRefresh);
+  }
+
+  componentWillReceiveProps(nextProps) {
+      this.getUser();
+      this.setState({ onRefresh: true });
+      this.forceUpdate();
   }
 
   getUser() {
-    console.log("Got user");
     this.state.user = new User();
     Database.loadSensitivities().then(result => {
-        console.log(result[0]);
         this.setState({
           user: result[0],
           width: Dimensions.get('window').width - 92
@@ -95,7 +106,7 @@ export default class WeatherScreen extends Component {
   componentDidMount() {
     this.fetchCurrentConditions();
     this.fetchFiveDay();
-    console.log("Mounted");
+    this.fetchHumidityAndPressure();
   }
 
   fetchCurrentConditions() {
@@ -128,23 +139,43 @@ export default class WeatherScreen extends Component {
       });
   }
 
-  _onPressButton(myAlert) {
-    Alert.alert(myAlert);
+  fetchHumidityAndPressure() {
+    return fetch("https://clearmind-backend.herokuapp.com/api/pressureFiveDayForecast")
+      .then(response => response.json())
+      .then(responseJson => {
+        this.setState({
+          loadingPressure: false,
+          pressureFiveDayWeather: responseJson
+        });
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  }
+
+  _onPressButton(ind, selectedPrediction, myAlert, selectedDay) {
+    console.log(ind);
+    let myAlertStr = "";
+    for (i = 0; i< myAlert.length; i++) {
+      myAlertStr += myAlert[i] + " ";
+    }
+    if (myAlertStr.length < 7) {
+      myAlertStr = "No significant changes in weather conditions! Have a great day!";
+    }
+    Alert.alert(myAlertStr);
+    this.setState({
+        currDay: selectedDay,
+        selected: true,
+        currPrediction: selectedPrediction,
+        index: ind
+    });
+    this.forceUpdate();
   } 
 
   render() {
     //Current conditions from AccuWeather
-    const myText = this.state.currentWeather.map(item => {
-      return item.WeatherText;
-    });
     const myTemp = this.state.currentWeather.map(item => {
       return item.Temperature.Imperial.Value;
-    });
-    const myPressure = this.state.currentWeather.map(item => {
-      return item.Pressure.Imperial.Value;
-    });
-    const myHumidity = this.state.currentWeather.map(item => {
-      return item.RelativeHumidity;
     });
 
     //Five day forecast info
@@ -179,14 +210,22 @@ export default class WeatherScreen extends Component {
       return item.AirAndPollen[5].Value;
     });
 
+    //Humidity and pressure values from OpenWeatherMap
+    const pressures = this.state.pressureFiveDayWeather.map(item => {
+      return item.main.pressure;
+    });
+    const humidities = this.state.pressureFiveDayWeather.map(item => {
+      return item.main.humidity;
+    });
+
     const today = new Forecast(
       dates[0],
-      myText,
+      weatherTypes[0],
       myTemp,
       highs[0],
       lows[0],
-      myPressure,
-      myHumidity,
+      pressures[0],
+      humidities[0],
       moldCounts[0],
       ragweedCounts[0],
       grassCounts[0],
@@ -198,11 +237,11 @@ export default class WeatherScreen extends Component {
     const day2 = new Forecast(
       dates[1],
       weatherTypes[1],
-      "0",
+      myTemp,
       highs[1],
       lows[1],
-      25,
-      56,
+      pressures[8],
+      humidities[8],
       moldCounts[1],
       ragweedCounts[1],
       grassCounts[1],
@@ -213,11 +252,11 @@ export default class WeatherScreen extends Component {
     const day3 = new Forecast(
       dates[2],
       weatherTypes[2],
-      "0",
+      myTemp,
       highs[2],
       lows[2],
-      25,
-      56,
+      pressures[16],
+      humidities[16],
       moldCounts[2],
       ragweedCounts[2],
       grassCounts[2],
@@ -228,11 +267,11 @@ export default class WeatherScreen extends Component {
     const day4 = new Forecast(
       dates[3],
       weatherTypes[3],
-      "0",
+      myTemp,
       highs[3],
       lows[3],
-      25,
-      56,
+      pressures[24],
+      humidities[24],
       moldCounts[3],
       ragweedCounts[3],
       grassCounts[3],
@@ -243,11 +282,11 @@ export default class WeatherScreen extends Component {
     const day5 = new Forecast(
       dates[4],
       weatherTypes[4],
-      "0",
+      myTemp,
       highs[4],
       lows[4],
-      25,
-      56,
+      pressures[32],
+      humidities[32],
       moldCounts[4],
       ragweedCounts[4],
       grassCounts[4],
@@ -257,8 +296,7 @@ export default class WeatherScreen extends Component {
     );
     const fiveDay = [today, day2, day3, day4, day5];
 
-
-    //Need to recompute each time component loads
+    //Predictions for each pair of adjacent days
     const pred1 = PredictionModel.forecast(this.state.user, today, today);
     const pred2 = PredictionModel.forecast(this.state.user, today, day2);
     const pred3 = PredictionModel.forecast(this.state.user, day2, day3);
@@ -266,18 +304,32 @@ export default class WeatherScreen extends Component {
     const pred5 = PredictionModel.forecast(this.state.user, day4, day5);
     const predictions = [pred1, pred2, pred3, pred4, pred5];
 
+    //Change the display to the selected day if one has been selected
+    let displayDay = today;
+    if (this.state.selected) {
+      displayDay = this.state.currDay;
+    }
+
+    let displayPrediction = predictions[this.state.index];
+    
+
     //Display scroll wheel while fetching data
-    if (this.state.loadingCurr || this.state.loadingFiveDay) {
+    if (this.state.loadingCurr || this.state.loadingFiveDay || this.state.loadingPressure) {
       return (
         <View>
-          <ActivityIndicator />
+          <ActivityIndicator
+             animating={true}
+             color="#000000"
+             style={{height: 80, paddingTop: 250, opacity: 1}}
+             size="large"/>  
         </View>
+        
       );
     }
 
     return (
       <View style={Platform.select({ ios: { paddingTop: 80 }, android: {paddingTop: 50} })}>
-        <CurrentCard location="Atlanta, GA" forecast={today} />
+        <CurrentCard location="Atlanta, GA" forecast={today} nextForecast={displayDay} pressurePrediction={displayPrediction[0]} lightPrediction={displayPrediction[1]} grassPrediction={displayPrediction[2]} moldPrediction={displayPrediction[3]} ragweedPrediction={displayPrediction[4]} treePrediction={displayPrediction[5]}/>
         <View style={styles.weatherViewStyle}>
           <Text style={styles.weatherDetails}>
             Select a day to see details.
@@ -286,13 +338,13 @@ export default class WeatherScreen extends Component {
         <Card containerStyle={styles.card}>
           <View style={styles.viewStyle}>
             {fiveDay.map((fiveDayInfo, i) => {
-              return <TouchableOpacity key={i} onPress={() => this._onPressButton(fiveDayInfo.predictionToString(predictions[i]))}>
+              return <TouchableOpacity key={i} onPress={() => this._onPressButton(i, predictions[i], fiveDayInfo.predictionToString(predictions[i]), new Forecast(dates[i], fiveDayInfo.type, fiveDayInfo.currTemp, fiveDayInfo.highTemp, fiveDayInfo.lowTemp, fiveDayInfo.pressure, fiveDayInfo.humidity, fiveDayInfo.mold, fiveDayInfo.ragweed, fiveDayInfo.grass, fiveDayInfo.tree, fiveDayInfo.aq, fiveDayInfo.uv))}>
                 <View style={styles.column}>
                   <Text style={styles.notes}>{fiveDayInfo.day}</Text>
                   <Icon name={fiveDayInfo.type} size={40} color='white'></Icon>
                   <Text style={styles.notes}>{fiveDayInfo.highTemp + '°'}</Text>
                   <Text style={styles.lowTemp}>{fiveDayInfo.lowTemp + '°'}</Text>
-                  <Icon name={fiveDayInfo.predictionDisplayIcon(predictions[i])} size={40} color={fiveDayInfo.displayIcon(false)}></Icon>
+                  <Icon name={fiveDayInfo.predictionDisplayIcon(predictions[i])} size={40} color='black'></Icon>
                 </View>
               </TouchableOpacity>
             })}
