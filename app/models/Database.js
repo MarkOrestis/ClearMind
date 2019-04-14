@@ -30,6 +30,16 @@ export class Database {
         });
     }
 
+    static storeToken(token) {
+        return new Promise((resolve,reject)) => {
+            var userId = Database.getUserId();
+            const database = firebase.database();
+            const userRef = database.ref("deviceTokens/" + userId);
+            userRef.set(token);
+            resolve();
+        }
+    }
+
     static loadSensitivities() {
         return new Promise((resolve, reject) => {
             var userId = Database.getUserId();

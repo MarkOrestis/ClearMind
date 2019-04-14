@@ -5,6 +5,7 @@ import SwitchSelector from "react-native-switch-selector";
 import { AsyncStorage } from 'react-native';
 import firebase from 'react-native-firebase';
 import type {Notification, NotificationOpen} from 'react-native-firebase';
+import Database from './Database'
 
 import { Container, Item, Button, Icon } from "native-base";
 import { Database } from "../models/Database";
@@ -15,6 +16,21 @@ export default class Notifications extends Component {
         const enabled = await firebase.messaging().hasPermission();
         if (enabled) {
             // user has permissions
+
+            firebase.messaging().getToken()
+              .then(fcmToken => {
+                if (fcmToken) {
+                  // user has a device token
+                } else {
+                  // user doesn't have a device token yet
+                } 
+              });
+
+             this.onTokenRefreshListener = firebase.messaging().onTokenRefresh(fcmToken => {
+                // Process your token as required
+                Database.storeToken(fcmToken);
+                });
+             
         } else {
             // user doesn't have permission
             try {
@@ -25,6 +41,49 @@ export default class Notifications extends Component {
                 alert('No permission for notification');
             }
         }
+
+        // exports.sendMessageNotification = functions.database.ref('conversations/{conversationID}/messages/{messageID}').onWrite(event => {
+        //   if (event.data.previous.exists()) {
+        //     return;
+        //   }
+
+        // firebase.database().ref('messages').child(event.params.messageID).once('value').then(function(snap) {
+        //     var messageData = snap.val();
+
+        // var topic = 'notifications_' + messageData.receiverKey;
+        //     var payload = {
+        //       notification: {
+        //         title: "You got a new Message",
+        //         body: messageData.content,
+        //       }
+        //     };
+            
+        //     admin.messaging().sendToTopic(topic, payload)
+        //         .then(function(response) {
+        //           console.log("Successfully sent message:", response);
+        //         })
+        //         .catch(function(error) {
+        //           console.log("Error sending message:", error);
+        //         });
+        //   });
+        // });
+
+        // FCM.subscribeToTopic('notifications_' + userKey);
+
+        // this.notificationListener = FCM.on(FCMEvent.Notification, async (notif) => {
+        //   if (!notif.local_notification) {
+        //     FCM.presentLocalNotification({
+        //       id: "UNIQ_ID_STRING",
+        //       title: notif.aps.alert.title,
+        //       body: notif.aps.alert.body,
+        //       sound: "default",
+        //       priority: "high",
+        //       click_action: "ACTION",
+        //       icon: "ic_launcher",
+        //       show_in_foreground: true,
+        //     });
+        //   }
+        // });
 
         const notificationOpen: NotificationOpen = await firebase.notifications().getInitialNotification();
         if (notificationOpen) {
@@ -158,4 +217,5 @@ export default class Notifications extends Component {
         this.notificationDisplayedListener();
         this.notificationListener();
         this.notificationOpenedListener();
+        this.onTokenRefreshListener();
     }

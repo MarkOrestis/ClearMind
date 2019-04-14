@@ -461,7 +461,35 @@ export default class EditSensitivities extends Component {
     // );
   }
 
+  // Saves the messaging device token to the datastore.
+function saveMessagingDeviceToken() {
+  firebase.messaging().getToken().then(function(currentToken) {
+    if (currentToken) {
+      console.log('Got FCM device token:', currentToken);
+      // Saving the Device Token to the datastore.
+      firebase.database().ref('users/' + this.currentUid + '/notificationTokens/' + currentToken).set(true);
+    } else {
+      // Need to request permissions to show notifications.
+      requestNotificationsPermissions();
+    }
+  }).catch(function(error){
+    console.error('Unable to get messaging token.', error);
+  });
+}
+
+// Requests permissions to show notifications.
+function requestNotificationsPermissions() {
+  console.log('Requesting notifications permission...');
+  firebase.messaging().requestPermission().then(function() {
+    // Notification permission granted.
+    saveMessagingDeviceToken();
+  }).catch(function(error) {
+    console.error('Unable to get permission to notify.', error);
+  });
+}
+
   submitSensitivities() {
+    saveMessagingDeviceToken();
     Database.storeSensitivities(new User(this.state.user))
       .then(() => {
         Alert.alert("Successfully Saved");
