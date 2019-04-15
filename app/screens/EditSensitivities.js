@@ -4,7 +4,7 @@ import SwitchSelector from '../components/SwitchSelector/SwitchSelector'
 
 import { AsyncStorage } from 'react-native';
 import firebase from 'react-native-firebase';
-import type {Notification, NotificationOpen} from 'react-native-firebase';
+import {Notification, NotificationOpen} from 'react-native-firebase';
 
 import { Container, Item, Button, Icon } from "native-base";
 import { Database } from "../models/Database";
@@ -134,7 +134,7 @@ export default class EditSensitivities extends Component {
             <Container
               style={Platform.select({ ios: { paddingTop: 20 }, android: {} })}
             >
-              <Item style={{ paddingBottom: 8, paddingTop: 75 }}>
+              <Item style={{ paddingBottom: 10, paddingTop: 75 }}>
                 <Text style={{ fontWeight: "bold", fontSize: 16, paddingRight: 10 }}>
                   {" "}
                   Pressure
@@ -153,7 +153,7 @@ export default class EditSensitivities extends Component {
                 />
               </Item>
       
-              <Item style={{ padding: 8 }}>
+              <Item style={{ padding: 10 }}>
                 <Text style={{ fontWeight: "bold", fontSize: 16, paddingRight: 34 }}>
                   {" "}
                   Light
@@ -172,7 +172,7 @@ export default class EditSensitivities extends Component {
                 />
               </Item>
       
-              <Item style={{ padding: 8 }}>
+              <Item style={{ padding: 10 }}>
                 <Text style={{ fontWeight: "bold", fontSize: 16, paddingRight: 28 }}>
                   {" "}
                   Pollen
@@ -192,7 +192,7 @@ export default class EditSensitivities extends Component {
                 />
               </Item>
       
-              <Item style={this.state.pollen ? { padding: 8 } : { display: "none" }}>
+              <Item style={this.state.pollen ? { padding: 10 } : { display: "none" }}>
                 <Text style={{ fontWeight: "bold", fontSize: 16, paddingRight: 31 }}>
                   {" "}
                   Grass
@@ -211,7 +211,7 @@ export default class EditSensitivities extends Component {
                 />
               </Item>
       
-              <Item style={this.state.pollen ? { padding: 8 } : { display: "none" }}>
+              <Item style={this.state.pollen ? { padding: 10 } : { display: "none" }}>
                 <Text style={{ fontWeight: "bold", fontSize: 16, paddingRight: 40 }}>
                   {" "}
                   Tree
@@ -230,7 +230,7 @@ export default class EditSensitivities extends Component {
                 />
               </Item>
       
-              <Item style={this.state.pollen ? { padding: 8 } : { display: "none" }}>
+              <Item style={this.state.pollen ? { padding: 10 } : { display: "none" }}>
                 <Text style={{ fontWeight: "bold", fontSize: 16, paddingRight: 36 }}>
                   {" "}
                   Mold
@@ -249,7 +249,7 @@ export default class EditSensitivities extends Component {
                 />
               </Item>
       
-              <Item style={this.state.pollen ? { padding: 8 } : { display: "none" }}>
+              <Item style={this.state.pollen ? { padding: 10 } : { display: "none" }}>
                 <Text style={{ fontWeight: "bold", fontSize: 16, paddingRight: 32 }}>
                   {" "}
                   Weed
@@ -295,175 +295,10 @@ export default class EditSensitivities extends Component {
             </Container>
           );
       }
-    // return (
-    //   <Container
-    //     style={Platform.select({ ios: { paddingTop: 20 }, android: {} })}
-    //   >
-    //     <Item style={{ paddingBottom: 4, paddingTop: 75 }}>
-    //       <Text style={{ fontWeight: "bold", fontSize: 16, paddingRight: 10 }}>
-    //         {" "}
-    //         Pressure
-    //       </Text>
-    //       <SwitchSelector
-    //         value={this.state.user.pressure}
-    //         // initial={this.state.user.pressure}
-    //         onPress={value => {
-    //           this.setState({ user: { ...this.state.user, pressure: value } });
-    //         }}
-    //         textColor={"#000000"}
-    //         selectedColor={"#FFFFFF"}
-    //         height={26}
-    //         width={275}
-    //         options={sensitivitiesScales}
-    //       />
-    //     </Item>
-
-
-
-    //     <Item style={{ padding: 4 }}>
-    //       <Text style={{ fontWeight: "bold", fontSize: 16, paddingRight: 36 }}>
-    //         {" "}
-    //         Light
-    //       </Text>
-    //       <SwitchSelector
-    //         value={this.state.user.light}
-    //         // initial={this.state.user.light}
-    //         onPress={value => {
-    //           this.setState({ user: { ...this.state.user, light: value } });
-    //         }}
-    //         textColor={"#000000"}
-    //         selectedColor={"#FFFFFF"}
-    //         height={30}
-    //         width={275}
-    //         options={sensitivitiesScales}
-    //       />
-    //     </Item>
-
-    //     <Item style={{ padding: 4 }}>
-    //       <Text style={{ fontWeight: "bold", fontSize: 16, paddingRight: 28 }}>
-    //         {" "}
-    //         Pollen
-    //       </Text>
-    //       <SwitchSelector
-    //         value={this.state.user.pollen}
-    //         // initial={this.state.user.pollen}
-    //         onPress={value => {
-    //           this.setState({ user: { ...this.state.user, pollen: value } });
-    //           this.pollenRating(value);
-    //         }}
-    //         textColor={"#000000"}
-    //         selectedColor={"#FFFFFF"}
-    //         height={30}
-    //         width={275}
-    //         options={pollenScales}
-    //       />
-    //     </Item>
-
-    //     <Item style={this.state.pollen ? { padding: 4 } : { display: "none" }}>
-    //       <Text style={{ fontWeight: "bold", fontSize: 16, paddingRight: 31 }}>
-    //         {" "}
-    //         Grass
-    //       </Text>
-    //       <SwitchSelector
-    //         value={this.state.user.grass}
-    //         // initial={this.state.user.grass}
-    //         onPress={value => {
-    //           this.setState({ user: { ...this.state.user, grass: value } });
-    //         }}
-    //         textColor={"#000000"}
-    //         selectedColor={"#FFFFFF"}
-    //         height={30}
-    //         width={275}
-    //         options={sensitivitiesScales}
-    //       />
-    //     </Item>
-
-    //     <Item style={this.state.pollen ? { padding: 4 } : { display: "none" }}>
-    //       <Text style={{ fontWeight: "bold", fontSize: 16, paddingRight: 40 }}>
-    //         {" "}
-    //         Tree
-    //       </Text>
-    //       <SwitchSelector
-    //         value={this.state.user.tree}
-    //         // initial={this.state.user.tree}
-    //         onPress={value => {
-    //           this.setState({ user: { ...this.state.user, tree: value } });
-    //         }}
-    //         textColor={"#000000"}
-    //         selectedColor={"#FFFFFF"}
-    //         height={30}
-    //         width={275}
-    //         options={sensitivitiesScales}
-    //       />
-    //     </Item>
-
-    //     <Item style={this.state.pollen ? { padding: 4 } : { display: "none" }}>
-    //       <Text style={{ fontWeight: "bold", fontSize: 16, paddingRight: 36 }}>
-    //         {" "}
-    //         Mold
-    //       </Text>
-    //       <SwitchSelector
-    //         value={this.state.user.mold}
-    //         // initial={this.state.user.mold}
-    //         onPress={value => {
-    //           this.setState({ user: { ...this.state.user, mold: value } });
-    //         }}
-    //         textColor={"#000000"}
-    //         selectedColor={"#FFFFFF"}
-    //         height={30}
-    //         width={275}
-    //         options={sensitivitiesScales}
-    //       />
-    //     </Item>
-
-    //     <Item style={this.state.pollen ? { padding: 4 } : { display: "none" }}>
-    //       <Text style={{ fontWeight: "bold", fontSize: 16, paddingRight: 32 }}>
-    //         {" "}
-    //         Weed
-    //       </Text>
-    //       <SwitchSelector
-    //         value={this.state.user.weed}
-    //         // initial={this.state.user.weed}
-    //         onPress={value => {
-    //           this.setState({ user: { ...this.state.user, weed: value } });
-    //         }}
-    //         textColor={"#000000"}
-    //         selectedColor={"#FFFFFF"}
-    //         height={30}
-    //         width={275}
-    //         options={sensitivitiesScales}
-    //       />
-    //     </Item>
-
-    //     <Button
-    //       block
-    //       bordered
-    //       small
-    //       style={{
-    //         marginTop: 10,
-    //         marginLeft: 150,
-    //         marginRight: 150,
-    //         backgroundColor: "transparent",
-    //         borderColor: "#000000"
-    //       }}
-    //       onPress={() => this.submitSensitivities()}
-    //     >
-    //       <Text
-    //         style={{
-    //           color: "#000000",
-    //           fontSize: 16,
-    //           backgroundColor: "transparent"
-    //         }}
-    //       >
-    //         {" "}
-    //         Save{" "}
-    //       </Text>
-    //     </Button>
-    //   </Container>
-    // );
   }
 
   submitSensitivities() {
+    // saveMessagingDeviceToken();
     Database.storeSensitivities(new User(this.state.user))
       .then(() => {
         Alert.alert("Successfully Saved");

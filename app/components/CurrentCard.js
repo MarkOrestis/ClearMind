@@ -58,6 +58,7 @@ export default class CurrentCard extends Component {
     }
 
     render() {
+      console.log(this.state.nextForecast)
       
       //Icons for the pressure, light, pollen if they warrant an alert based on the prediction model
       var predictions = [this.state.pressurePrediction, this.state.lightPrediction, this.state.grassPrediction, this.state.moldPrediction, this.state.ragweedPrediction, this.state.treePrediction];

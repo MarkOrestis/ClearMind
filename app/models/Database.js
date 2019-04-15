@@ -56,16 +56,21 @@ export class Database {
     }
 
     static dailyFeedbackExist() {
+        console.log("in daily feedback");
         return new Promise((resolve, reject) => {
+            console.log("in feedback promise");
             var userId = Database.getUserId();
-            var database = firebase.database();
-            var feedbackRef = database.ref("users/" + userId + "/feedback/" + d);
-            if (feedbackRef.exists()) {
-                console.log(feedbackRef)
-                resolve();
-            } else {
-                reject()
-            }
+            var ref = firebase.database().ref("users/" + userId);
+            ref.once('value')
+                .then(function(userSnapshot) {
+                    if (userSnapshot.child("feedback/" + d).exists()) {
+                        console.log("feedback exists for " + d);
+                        resolve();
+                    } else {
+                        console.log("feedback does not exist for: " + d);
+                        reject();
+                    }
+                });
         });
     }
 

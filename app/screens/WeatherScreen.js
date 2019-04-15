@@ -7,25 +7,28 @@ import {
   Image,
   Platform,
   ActivityIndicator,
-  FlatList, 
+  FlatList,
   Dimensions,
   TouchableOpacity,
   Alert
 } from "react-native";
+import CircleCheckBox, {
+  LABEL_POSITION
+} from "../components/CircleCheckBox/CircleCheckBox";
 import { Card, Divider } from "react-native-elements";
-import FAIcon from 'react-native-vector-icons/FontAwesome';
+import FAIcon from "react-native-vector-icons/FontAwesome";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import CurrentCard from "../components/CurrentCard";
 import FiveDayForecast from "../components/FiveDayForecast";
 import { BorderlessButton } from "react-native-gesture-handler";
 import Forecast from "../models/Forecast";
-import PredictionModel from '../models/PredictionModel';
+import PredictionModel from "../models/PredictionModel";
 import { styles } from "../config/styles/styles";
 import User from "../models/User";
-import {Database} from "../models/Database";
+import { Database } from "../models/Database";
+import { List, Input } from "native-base";
 
 export default class WeatherScreen extends Component {
-
   static navigationOptions = ({ navigation, screenProps }) => ({
     title: "Weather Conditions",
     headerTransparent: true,
@@ -49,12 +52,12 @@ export default class WeatherScreen extends Component {
       <Icon
         name="settings"
         size={28}
-        style={{display: 'none'}}
+        style={{ display: "none" }}
         onPress={() => {
           navigation.navigate("SettingsScreen");
         }}
       />
-    ),
+    )
   });
 
   constructor(props) {
@@ -74,16 +77,17 @@ export default class WeatherScreen extends Component {
       currPrediction: [],
       feedback: [],
       feedbackExists: false,
+      renderFeedbackFoot: false,
+      migraineChecked: false,
       index: 0
     };
 
     this.myText = "";
-
   }
 
   componentWillMount() {
-      this.getUser();
-      this.hasLeftFeedback();
+    this.getUser();
+    this.hasLeftFeedback();
   }
 
   componentDidUpdate() {
@@ -91,38 +95,164 @@ export default class WeatherScreen extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-      this.getUser();
-      this.setState({ onRefresh: true });
-      this.forceUpdate();
+    this.getUser();
+    this.hasLeftFeedback();
+    this.setState({ onRefresh: true });
+    this.forceUpdate();
   }
 
   getUser() {
     this.state.user = new User();
     Database.loadSensitivities().then(result => {
-        this.setState({
-          user: result[0],
-          width: Dimensions.get('window').width - 92
-        });
+      this.setState({
+        user: result[0]
       });
-  }  
-
-  hasLeftFeedback() {
-    Database.dailyFeedbackExist()
-    .then(() => {
-      this.state.feedbackExists = true;
-    })
-    .catch(() => {
-      this.state.feedbackExists = false;
     });
   }
 
-  renderFooter() {
-    if (this.state.feedbackExists) {
-
-    } else {
-      
-    }
+  hasLeftFeedback() {
+    Database.dailyFeedbackExist()
+      .then(() => {
+        this.state.feedbackExists = true;
+      })
+      .catch(() => {
+        this.state.feedbackExists = false;
+      });
+    console.log("feedback: " + this.state.feedbackExists);
   }
+
+  renderResults = () => {
+    this.setState({
+      feedbackExists: true //toggles the visibilty of the text
+    });
+  };
+
+  renderFooter = () => {
+    if (!this.state.feedbackExists && !this.state.renderFeedbackFoot) {
+      return (
+        <View>
+          <Text style={styles.userFeedbackText}>
+            How are you feeling today?
+          </Text>
+          <View style={styles.feedbackView}>
+            <FAIcon
+              name="thumbs-o-up"
+              style={styles.feedbackEmoji}
+              size={50}
+              color="green"
+              onPress={() => {
+                console.log("thumbs up pressed");
+                this.state.feedback = ["good"];
+                this.state.feedbackExists = true;
+                Database.storeDailyFeedback(this.state.feedback);
+                this.forceUpdate();
+              }}
+            />
+
+            <FAIcon
+              name="thumbs-o-down"
+              style={styles.feedbackEmoji}
+              size={50}
+              color="red"
+              onPress={() => {
+                this.state.renderFeedbackFoot = true;
+                this.renderFeedbackFooter();
+                this.forceUpdate();
+              }}
+            />
+          </View>
+        </View>
+      );
+    } else if (this.state.renderFeedbackFoot) {
+      return (
+        <View>
+          <View style={{ flexDirection: "column" }}>
+            <CircleCheckBox
+              checked={this.state.migraineChecked}
+              onToggle={checked => {
+                this.state.migraineChecked = checked;
+                this.forceUpdate();
+                if (checked) {
+                  this.state.feedback.push("migraine");
+                } else {
+                  if (this.state.feedback.includes("migraine")) {
+                    this.state.feedback.pop("migraine");
+                  }
+                }
+                console.log(this.state.feedback);
+              }}
+              labelPosition={LABEL_POSITION.RIGHT}
+              label="Migraine"
+            />
+            <CircleCheckBox
+              checked={this.state.headacheChecked}
+              onToggle={checked => {
+                this.state.headacheChecked = checked;
+                this.forceUpdate();
+                if (checked) {
+                  this.state.feedback.push("headache");
+                } else {
+                  if (this.state.feedback.includes("headache")) {
+                    this.state.feedback.pop("headache");
+                  }
+                }
+                // this.state.feedback.push("headache");
+                console.log(this.state.feedback);
+              }}
+              labelPosition={LABEL_POSITION.RIGHT}
+              label="Headache"
+            />
+            <CircleCheckBox
+              checked={this.state.allergiesChecked}
+              onToggle={checked => {
+                this.state.allergiesChecked = checked;
+                this.forceUpdate();
+                if (checked) {
+                  this.state.feedback.push("allergies");
+                } else {
+                  if (this.state.feedback.includes("allergies")) {
+                    this.state.feedback.pop("allergies");
+                  }
+                }
+                console.log(this.state.feedback);
+              }}
+              labelPosition={LABEL_POSITION.RIGHT}
+              label="Allergies"
+            />
+            <Input
+              placeholder="other"
+              // placeholderTextColor={colorPalette.primaryText}
+              autoCapitalize="words"
+              autoCorrect={true}
+              keyboardType="default"
+              style={{ alignSelf: "flex-end" }}
+              onChangeText={symptom => {
+                this.state.feedback.push(symptom);
+              }}
+            />
+          </View>
+
+          <View>
+            <Button
+              title="Save"
+              onPress={() => {
+                Database.storeDailyFeedback(this.state.feedback);
+                this.state.feedbackExists = true;
+                this.state.renderFeedbackFoot = false;
+                this.forceUpdate();
+                // this.renderFooter();
+              }}
+            />
+          </View>
+        </View>
+      );
+    } else {
+      // Could return advert here at the bottom
+      return <View />;
+    }
+  };
+
+  renderFeedbackFooter = () => {};
 
   componentDidMount() {
     this.fetchCurrentConditions();
@@ -161,7 +291,9 @@ export default class WeatherScreen extends Component {
   }
 
   fetchHumidityAndPressure() {
-    return fetch("https://clearmind-backend.herokuapp.com/api/pressureFiveDayForecast")
+    return fetch(
+      "https://clearmind-backend.herokuapp.com/api/pressureFiveDayForecast"
+    )
       .then(response => response.json())
       .then(responseJson => {
         this.setState({
@@ -177,25 +309,22 @@ export default class WeatherScreen extends Component {
   _onPressButton(ind, selectedPrediction, myAlert, selectedDay) {
     //console.log(ind);
     let myAlertStr = "";
-    for (i = 0; i< myAlert.length; i++) {
+    for (i = 0; i < myAlert.length; i++) {
       myAlertStr += myAlert[i] + " ";
     }
     if (myAlertStr.length < 7) {
-      myAlertStr = "No significant changes in weather conditions! Have a great day!";
+      myAlertStr =
+        "No significant changes in weather conditions! Have a great day!";
     }
     Alert.alert(myAlertStr);
     this.setState({
-        currDay: selectedDay,
-        selected: true,
-        currPrediction: selectedPrediction,
-        index: ind
+      currDay: selectedDay,
+      selected: true,
+      currPrediction: selectedPrediction,
+      index: ind
     });
     this.forceUpdate();
-  } 
-
-  // isFeedbackVisible() {
-
-  // }
+  }
 
   render() {
     //Current conditions from AccuWeather
@@ -338,52 +467,94 @@ export default class WeatherScreen extends Component {
     }
 
     let displayPrediction = predictions[this.state.index];
-    
 
     //Display scroll wheel while fetching data
-    if (this.state.loadingCurr || this.state.loadingFiveDay || this.state.loadingPressure) {
+    if (
+      this.state.loadingCurr ||
+      this.state.loadingFiveDay ||
+      this.state.loadingPressure
+    ) {
       return (
         <View>
           <ActivityIndicator
-             animating={true}
-             color="#000000"
-             style={{height: 80, paddingTop: 250, opacity: 1}}
-             size="large"/>  
+            animating={true}
+            color="#000000"
+            style={{ height: 80, paddingTop: 250, opacity: 1 }}
+            size="large"
+          />
         </View>
-        
       );
     }
 
     return (
-      <View style={Platform.select({ ios: { paddingTop: 80 }, android: {paddingTop: 50} })}>
-        <CurrentCard location="Atlanta, GA" forecast={today} nextForecast={displayDay} pressurePrediction={displayPrediction[0]} lightPrediction={displayPrediction[1]} grassPrediction={displayPrediction[2]} moldPrediction={displayPrediction[3]} ragweedPrediction={displayPrediction[4]} treePrediction={displayPrediction[5]}/>
+      <View
+        style={Platform.select({
+          ios: { paddingTop: 80 },
+          android: { paddingTop: 50 }
+        })}
+      >
+        <CurrentCard
+          location="Atlanta, GA"
+          forecast={today}
+          nextForecast={displayDay}
+          pressurePrediction={displayPrediction[0]}
+          lightPrediction={displayPrediction[1]}
+          grassPrediction={displayPrediction[2]}
+          moldPrediction={displayPrediction[3]}
+          ragweedPrediction={displayPrediction[4]}
+          treePrediction={displayPrediction[5]}
+        />
         <Card containerStyle={styles.card}>
           <View style={styles.viewStyle}>
             {fiveDay.map((fiveDayInfo, i) => {
-              return <TouchableOpacity key={i} onPress={() => this._onPressButton(i, predictions[i], fiveDayInfo.predictionToString(predictions[i]), new Forecast(dates[i], fiveDayInfo.type, fiveDayInfo.currTemp, fiveDayInfo.highTemp, fiveDayInfo.lowTemp, fiveDayInfo.pressure, fiveDayInfo.humidity, fiveDayInfo.mold, fiveDayInfo.ragweed, fiveDayInfo.grass, fiveDayInfo.tree, fiveDayInfo.aq, fiveDayInfo.uv))}>
-                <View style={styles.column}>
-                  <Text style={styles.notes}>{fiveDayInfo.day}</Text>
-                  <Icon name={fiveDayInfo.type} size={40} color='white'></Icon>
-                  <Text style={styles.notes}>{fiveDayInfo.highTemp + '°'}</Text>
-                  <Text style={styles.lowTemp}>{fiveDayInfo.lowTemp + '°'}</Text>
-                  <Icon name={fiveDayInfo.predictionDisplayIcon(predictions[i])} size={40} color='black'></Icon>
-                </View>
-              </TouchableOpacity>
+              return (
+                <TouchableOpacity
+                  key={i}
+                  onPress={() =>
+                    this._onPressButton(
+                      i,
+                      predictions[i],
+                      fiveDayInfo.predictionToString(predictions[i]),
+                      new Forecast(
+                        dates[i],
+                        fiveDayInfo.type,
+                        fiveDayInfo.currTemp,
+                        fiveDayInfo.highTemp,
+                        fiveDayInfo.lowTemp,
+                        fiveDayInfo.pressure,
+                        fiveDayInfo.humidity,
+                        fiveDayInfo.mold,
+                        fiveDayInfo.ragweed,
+                        fiveDayInfo.grass,
+                        fiveDayInfo.tree,
+                        fiveDayInfo.aq,
+                        fiveDayInfo.uv
+                      )
+                    )
+                  }
+                >
+                  <View style={styles.column}>
+                    <Text style={styles.notes}>{fiveDayInfo.day}</Text>
+                    <Icon name={fiveDayInfo.type} size={40} color="white" />
+                    <Text style={styles.notes}>
+                      {fiveDayInfo.highTemp + "°"}
+                    </Text>
+                    <Text style={styles.lowTemp}>
+                      {fiveDayInfo.lowTemp + "°"}
+                    </Text>
+                    <Icon
+                      name={fiveDayInfo.predictionDisplayIcon(predictions[i])}
+                      size={40}
+                      color="black"
+                    />
+                  </View>
+                </TouchableOpacity>
+              );
             })}
           </View>
         </Card>
-
-        <View>
-        {/* <View style={{display: 'none'}}></View> */}
-            <Text style={styles.userFeedbackText} >How are you feeling today?</Text>
-            <View style={styles.feedbackView}>
-              <FAIcon name='thumbs-o-up' style={styles.feedbackEmoji} size={50} color='green' onPress={() => {this.state.feedback = ["good"]; Database.storeDailyFeedback(this.state.feedback)}}/>
-
-              <FAIcon name='thumbs-o-down' style={styles.feedbackEmoji} size={50} color='red' onPress={() => {this.state.feedback = ["headache", "migraine"]; Database.storeDailyFeedback(this.state.feedback)}}/>
-            </View>
-
-        </View> 
-
+        {this.renderFooter()}
+        {/* {this.renderFeedbackFooter()} */}
       </View>
     );
   }
