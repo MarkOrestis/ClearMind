@@ -8,6 +8,8 @@ export default class User {
             this.mold = 0;
             this.weed = 0;
             this.grass = 0;
+            this.prediction = [];
+            this.notificationToken = '';
         } else {
             obj && Object.assign(this, obj);
         }

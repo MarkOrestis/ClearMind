@@ -32,22 +32,22 @@ admin.initializeApp();
  * Followers add a flag to `/followers/{followedUid}/{followerUid}`.
  * Users save their device notification tokens to `/users/{followedUid}/notificationTokens/{notificationToken}`.
  */
-exports.sendFollowerNotification = functions.database.ref('/followers/{followedUid}/{followerUid}')
+exports.sendFollowerNotification = functions.database.ref('/users/prediction')
     .onWrite(async (change, context) => {
-      const followerUid = context.params.followerUid;
-      const followedUid = context.params.followedUid;
+      const prediction = context.params.prediction;
+      const userUid = context.params.userUid;
       // If un-follow we exit the function.
       if (!change.after.val()) {
-        return console.log('User ', followerUid, 'un-followed user', followedUid);
+        return console.log('User ', prediction, 'has no update', userUid);
       }
-      console.log('We have a new follower UID:', followerUid, 'for user:', followedUid);
+      console.log('We have a new update:', prediction, 'for user:', userUid);
 
       // Get the list of device notification tokens.
       const getDeviceTokensPromise = admin.database()
-          .ref(`/users/${followedUid}/notificationTokens`).once('value');
+          .ref(`/users/${userUid}/notificationTokens`).once('value');
 
-      // Get the follower profile.
-      const getFollowerProfilePromise = admin.auth().getUser(followerUid);
+      // Get the user
+      const getUserPromise = admin.auth().getUser(userUid);
 
       // The snapshot to the user's tokens.
       let tokensSnapshot;
@@ -55,7 +55,7 @@ exports.sendFollowerNotification = functions.database.ref('/followers/{followedU
       // The array containing all the user's tokens.
       let tokens;
 
-      const results = await Promise.all([getDeviceTokensPromise, getFollowerProfilePromise]);
+      const results = await Promise.all([getDeviceTokensPromise, getUserPromise]);
       tokensSnapshot = results[0];
       const follower = results[1];
 
@@ -69,7 +69,7 @@ exports.sendFollowerNotification = functions.database.ref('/followers/{followedU
       // Notification details.
       const payload = {
         notification: {
-          title: 'You have a new follower!',
+          title: 'You have a new prediction!',
           body: `${follower.displayName} is now following you.`,
           icon: follower.photoURL
         }
@@ -94,3 +94,54 @@ exports.sendFollowerNotification = functions.database.ref('/followers/{followedU
       });
       return Promise.all(tokensToRemove);
     });
+
+
+
+
+//     // Sends a notifications to all users when a new message is posted.
+// exports.sendNotifications = functions.firestore.document('messages/{messageId}').onCreate(
+//   async (snapshot) => {
+//     // Notification details.
+//     const text = snapshot.data().text;
+//     const payload = {
+//       notification: {
+//         title: `${snapshot.data().name} posted ${text ? 'a message' : 'an image'}`,
+//         body: text ? (text.length <= 100 ? text : text.substring(0, 97) + '...') : '',
+//         icon: snapshot.data().profilePicUrl || '/images/profile_placeholder.png',
+//         click_action: `https://${process.env.GCLOUD_PROJECT}.firebaseapp.com`,
+//       }
+//     };
+
+//     // Get the list of device tokens.
+//     const allTokens = await admin.firestore().collection('fcmTokens').get();
+//     const tokens = [];
+//     allTokens.forEach((tokenDoc) => {
+//       tokens.push(tokenDoc.id);
+//     });
+
+//     if (tokens.length > 0) {
+//       // Send notifications to all tokens.
+//       const response = await admin.messaging().sendToDevice(tokens, payload);
+//       await cleanupTokens(response, tokens);
+//       console.log('Notifications have been sent and tokens cleaned up.');
+//     }
+//   });
+
+// // Cleans up the tokens that are no longer valid.
+// function cleanupTokens(response, tokens) {
+//   // For each notification we check if there was an error.
+//   const tokensDelete = [];
+//   response.results.forEach((result, index) => {
+//     const error = result.error;
+//     if (error) {
+//       console.error('Failure sending notification to', tokens[index], error);
+//       // Cleanup the tokens who are not registered anymore.
+//       if (error.code === 'messaging/invalid-registration-token' ||
+//           error.code === 'messaging/registration-token-not-registered') {
+//         const deleteTask = admin.firestore().collection('messages').doc(tokens[index]).delete();
+//         tokensDelete.push(deleteTask);
+//       }
+//     }
+//   });
+//   return Promise.all(tokensDelete); 
+// }
