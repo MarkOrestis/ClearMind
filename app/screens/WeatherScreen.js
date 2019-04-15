@@ -8,6 +8,7 @@ import {
   Platform,
   ActivityIndicator,
   FlatList,
+  Linking,
   Dimensions,
   TouchableOpacity,
   Alert
@@ -27,6 +28,7 @@ import { styles } from "../config/styles/styles";
 import User from "../models/User";
 import { Database } from "../models/Database";
 import { List, Input } from "native-base";
+import { tsImportEqualsDeclaration } from "@babel/types";
 
 export default class WeatherScreen extends Component {
   static navigationOptions = ({ navigation, screenProps }) => ({
@@ -64,6 +66,7 @@ export default class WeatherScreen extends Component {
     super(props);
 
     this.state = {
+      width: '',
       loadingCurr: true,
       loadingFiveDay: true,
       loadingPressure: true,
@@ -88,6 +91,9 @@ export default class WeatherScreen extends Component {
   componentWillMount() {
     this.getUser();
     this.hasLeftFeedback();
+    this.setState({
+      width: Dimensions.get('window').width - 14
+    });
   }
 
   componentDidUpdate() {
@@ -96,7 +102,7 @@ export default class WeatherScreen extends Component {
 
   componentWillReceiveProps(nextProps) {
     this.getUser();
-    this.hasLeftFeedback();
+    // this.hasLeftFeedback();
     this.setState({ onRefresh: true });
     this.forceUpdate();
   }
@@ -112,8 +118,9 @@ export default class WeatherScreen extends Component {
 
   hasLeftFeedback() {
     Database.dailyFeedbackExist()
-      .then(() => {
+      .then(() => {        
         this.state.feedbackExists = true;
+        this.forceUpdate();
       })
       .catch(() => {
         this.state.feedbackExists = false;
@@ -129,6 +136,9 @@ export default class WeatherScreen extends Component {
 
   renderFooter = () => {
     if (!this.state.feedbackExists && !this.state.renderFeedbackFoot) {
+      console.log("feedbackExists :" + this.state.feedbackExists);
+      console.log("render feedback footer :" + this.state.renderFeedbackFoot);
+
       return (
         <View>
           <Text style={styles.userFeedbackText}>
@@ -166,7 +176,13 @@ export default class WeatherScreen extends Component {
     } else if (this.state.renderFeedbackFoot) {
       return (
         <View>
-          <View style={{ flexDirection: "column", alignItems:'center', paddingTop: 8}}>
+          <View
+            style={{
+              flexDirection: "column",
+              alignItems: "center",
+              paddingTop: 8
+            }}
+          >
             <CircleCheckBox
               checked={this.state.migraineChecked}
               onToggle={checked => {
@@ -221,7 +237,6 @@ export default class WeatherScreen extends Component {
             />
             <Input
               placeholder="other"
-              // placeholderTextColor={colorPalette.primaryText}
               autoCapitalize="words"
               autoCorrect={true}
               keyboardType="default"
@@ -232,7 +247,7 @@ export default class WeatherScreen extends Component {
             />
           </View>
 
-          <View style={{width: "50%", alignSelf:'center'}}>
+          <View style={{ width: "50%", alignSelf: "center" }}>
             <Button
               title="Save"
               onPress={() => {
@@ -240,7 +255,6 @@ export default class WeatherScreen extends Component {
                 this.state.feedbackExists = true;
                 this.state.renderFeedbackFoot = false;
                 this.forceUpdate();
-                // this.renderFooter();
               }}
             />
           </View>
@@ -248,7 +262,15 @@ export default class WeatherScreen extends Component {
       );
     } else {
       // Could return advert here at the bottom
-      return <View />;
+      return (
+        <View style={{flex: 1, height: "80%", padding:10, alignSelf:'center', alignContent:'center'}}>
+          <Image
+            source={require("../res/images/xyzalAdvertisement.jpeg")}
+            style={{ width: this.state.width}}
+            // onPress={Linking.openURL('https://www.amazon.com/Xyzal-Allergy-Symptoms-Including-Sneezing/dp/B01LQBIWT2')}
+          />
+        </View>
+      );
     }
   };
 
