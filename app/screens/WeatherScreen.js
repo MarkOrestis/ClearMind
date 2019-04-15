@@ -166,7 +166,7 @@ export default class WeatherScreen extends Component {
     } else if (this.state.renderFeedbackFoot) {
       return (
         <View>
-          <View style={{ flexDirection: "column" }}>
+          <View style={{ flexDirection: "column", alignItems:'center', paddingTop: 8}}>
             <CircleCheckBox
               checked={this.state.migraineChecked}
               onToggle={checked => {
@@ -232,7 +232,7 @@ export default class WeatherScreen extends Component {
             />
           </View>
 
-          <View>
+          <View style={{width: "50%", alignSelf:'center'}}>
             <Button
               title="Save"
               onPress={() => {
