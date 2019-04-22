@@ -11,7 +11,8 @@ import {
   Linking,
   Dimensions,
   TouchableOpacity,
-  Alert
+  Alert,
+  ScrollView
 } from "react-native";
 import CircleCheckBox, {
   LABEL_POSITION
@@ -509,9 +510,9 @@ export default class WeatherScreen extends Component {
     }
 
     return (
-      <View
+      <ScrollView
         style={Platform.select({
-          ios: { paddingTop: 80 },
+          ios: { paddingTop: 50 },
           android: { paddingTop: 50 }
         })}
       >
@@ -556,7 +557,7 @@ export default class WeatherScreen extends Component {
                   }
                 >
                   <View style={styles.column}>
-                    <Text style={styles.notes}>{fiveDayInfo.day}</Text>
+                    <Text style={styles.lowTemp}>{fiveDayInfo.day}</Text>
                     <Icon name={fiveDayInfo.type} size={40} color="white" />
                     <Text style={styles.notes}>
                       {fiveDayInfo.highTemp + "°"}
@@ -576,8 +577,8 @@ export default class WeatherScreen extends Component {
           </View>
         </Card>
         {this.renderFooter()}
-        {/* {this.renderFeedbackFooter()} */}
-      </View>
+        
+      </ScrollView>
     );
   }
 }
