@@ -29,7 +29,6 @@ import { styles } from "../config/styles/styles";
 import User from "../models/User";
 import { Database } from "../models/Database";
 import { List, Input } from "native-base";
-import { tsImportEqualsDeclaration } from "@babel/types";
 
 export default class WeatherScreen extends Component {
   static navigationOptions = ({ navigation, screenProps }) => ({
