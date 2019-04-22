@@ -26,74 +26,153 @@ const admin = require('firebase-admin');
 admin.initializeApp();
 
 
+exports.sendNotification = functions.database.ref('users/prediction')
+    .onWrite((snapshot, context) => {
+        const message = snapshot.val();
+        const userUid = message.to;
+        const promises = [];
+
+        if (senderUid === userUid) {
+            //if sender is receiver, don't send notification
+            promises.push(event.data.current.ref.remove());
+            return Promise.all(promises);
+        }
+
+        const getInstanceIdPromise = admin.database().ref(`/users/${userUid}/notificationTokens`).once('value');
+        const getReceiverUidPromise = admin.auth().getUser(userUid); //not needed i dont think but dont want to break method
+
+        return Promise.all([getInstanceIdPromise, getReceiverUidPromise]).then(results => {
+            const notificationTokens = results[0].val();
+            const receiver = results[1];
+            console.log('notifying ' + userUid + ' about ' + message.body + ' from ' + notificationTokens);
+
+            const payload = {
+                notification: {
+                    title: receiver.displayName,
+                    body: message.body,
+                }
+            };
+
+            admin.messaging().sendToDevice(notificationTokens, payload)
+                .then(function (response) {
+                    console.log("Successfully sent message:", response);
+                    return true; //compiler needs then to return or throw
+                })
+                .catch(function (error) {
+                    console.log("Error sending message:", error);
+                });
+
+            return null; //compiler needs then to return or throw
+        });
+    });
+
+    // exports.sendNotification = functions.database.ref('/notifications/messages/{pushId}')
+    // .onWrite(event => {
+    //     const message = event.data.current.val();
+    //     const senderUid = message.from;
+    //     const receiverUid = message.to;
+    //     const promises = [];
+
+    //     if (senderUid == receiverUid) {
+    //         //if sender is receiver, don't send notification
+    //         promises.push(event.data.current.ref.remove());
+    //         return Promise.all(promises);
+    //     }
+
+    //     const getInstanceIdPromise = admin.database().ref(`/users/${userUid}/notificationTokens`).once('value');
+    //     const getReceiverUidPromise = admin.auth().getUser(receiverUid);
+
+    //     return Promise.all([getInstanceIdPromise, getReceiverUidPromise]).then(results => {
+    //         const instanceId = results[0].val();
+    //         const receiver = results[1];
+    //         console.log('notifying ' + receiverUid + ' about ' + message.body + ' from ' + senderUid);
+
+    //         const payload = {
+    //             notification: {
+    //                 title: receiver.displayName,
+    //                 body: message.body,
+    //                 icon: receiver.photoURL
+    //             }
+    //         };
+
+    //         admin.messaging().sendToDevice(instanceId, payload)
+    //             .then(function (response) {
+    //                 console.log("Successfully sent message:", response);
+    //             })
+    //             .catch(function (error) {
+    //                 console.log("Error sending message:", error);
+    //             });
+    //     });
+    // });
+
 /**
  * Triggers when a user gets a new follower and sends a notification.
  *
  * Followers add a flag to `/followers/{followedUid}/{followerUid}`.
  * Users save their device notification tokens to `/users/{followedUid}/notificationTokens/{notificationToken}`.
  */
-exports.sendFollowerNotification = functions.database.ref('/users/prediction')
-    .onWrite(async (change, context) => {
-      const prediction = context.params.prediction;
-      const userUid = context.params.userUid;
-      // If un-follow we exit the function.
-      if (!change.after.val()) {
-        return console.log('User ', prediction, 'has no update', userUid);
-      }
-      console.log('We have a new update:', prediction, 'for user:', userUid);
+// exports.sendFollowerNotification = functions.database.ref('/users/prediction')
+//     .onWrite(async (change, context) => {
+//       const prediction = context.params.prediction;
+//       const userUid = context.params.userUid;
+//       // If un-follow we exit the function.
+//       if (!change.after.val()) {
+//         return console.log('User ', prediction, 'has no update', userUid);
+//       }
+//       console.log('We have a new update:', prediction, 'for user:', userUid);
 
-      // Get the list of device notification tokens.
-      const getDeviceTokensPromise = admin.database()
-          .ref(`/users/${userUid}/notificationTokens`).once('value');
+//       // Get the list of device notification tokens.
+//       const getDeviceTokensPromise = admin.database()
+//           .ref(`/users/${userUid}/notificationTokens`).once('value');
 
-      // Get the user
-      const getUserPromise = admin.auth().getUser(userUid);
+//       // Get the user
+//       const getUserPromise = admin.auth().getUser(userUid);
 
-      // The snapshot to the user's tokens.
-      let tokensSnapshot;
+//       // The snapshot to the user's tokens.
+//       let tokensSnapshot;
 
-      // The array containing all the user's tokens.
-      let tokens;
+//       // The array containing all the user's tokens.
+//       let tokens;
 
-      const results = await Promise.all([getDeviceTokensPromise, getUserPromise]);
-      tokensSnapshot = results[0];
-      const follower = results[1];
+//       const results = await Promise.all([getDeviceTokensPromise, getUserPromise]);
+//       tokensSnapshot = results[0];
+//       const follower = results[1];
 
-      // Check if there are any device tokens.
-      if (!tokensSnapshot.hasChildren()) {
-        return console.log('There are no notification tokens to send to.');
-      }
-      console.log('There are', tokensSnapshot.numChildren(), 'tokens to send notifications to.');
-      console.log('Fetched follower profile', follower);
+//       // Check if there are any device tokens.
+//       if (!tokensSnapshot.hasChildren()) {
+//         return console.log('There are no notification tokens to send to.');
+//       }
+//       console.log('There are', tokensSnapshot.numChildren(), 'tokens to send notifications to.');
+//       console.log('Fetched follower profile', follower);
 
-      // Notification details.
-      const payload = {
-        notification: {
-          title: 'You have a new prediction!',
-          body: `${follower.displayName} is now following you.`,
-          icon: follower.photoURL
-        }
-      };
+//       // Notification details.
+//       const payload = {
+//         notification: {
+//           title: 'You have a new prediction!',
+//           body: `${follower.displayName} is now following you.`,
+//           icon: follower.photoURL
+//         }
+//       };
 
-      // Listing all tokens as an array.
-      tokens = Object.keys(tokensSnapshot.val());
-      // Send notifications to all tokens.
-      const response = await admin.messaging().sendToDevice(tokens, payload);
-      // For each message check if there was an error.
-      const tokensToRemove = [];
-      response.results.forEach((result, index) => {
-        const error = result.error;
-        if (error) {
-          console.error('Failure sending notification to', tokens[index], error);
-          // Cleanup the tokens who are not registered anymore.
-          if (error.code === 'messaging/invalid-registration-token' ||
-              error.code === 'messaging/registration-token-not-registered') {
-            tokensToRemove.push(tokensSnapshot.ref.child(tokens[index]).remove());
-          }
-        }
-      });
-      return Promise.all(tokensToRemove);
-    });
+//       // Listing all tokens as an array.
+//       tokens = Object.keys(tokensSnapshot.val());
+//       // Send notifications to all tokens.
+//       const response = await admin.messaging().sendToDevice(tokens, payload);
+//       // For each message check if there was an error.
+//       const tokensToRemove = [];
+//       response.results.forEach((result, index) => {
+//         const error = result.error;
+//         if (error) {
+//           console.error('Failure sending notification to', tokens[index], error);
+//           // Cleanup the tokens who are not registered anymore.
+//           if (error.code === 'messaging/invalid-registration-token' ||
+//               error.code === 'messaging/registration-token-not-registered') {
+//             tokensToRemove.push(tokensSnapshot.ref.child(tokens[index]).remove());
+//           }
+//         }
+//       });
+//       return Promise.all(tokensToRemove);
+//     });
 
 
 
