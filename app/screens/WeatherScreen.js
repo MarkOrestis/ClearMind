@@ -47,7 +47,7 @@ export default class WeatherScreen extends Component {
         size={28}
         style={{ paddingRight: 20 }}
         onPress={() => {
-          navigation.navigate("SettingsScreen");
+          navigation.navigate("SensitivitiesScreen");
         }}
       />
     ),
@@ -387,6 +387,19 @@ export default class WeatherScreen extends Component {
       return item.AirAndPollen[5].Value;
     });
 
+    const grassCategories = this.state.fiveDayWeather.map(item => {
+      return item.AirAndPollen[1].Category;
+    });
+    const moldCategories = this.state.fiveDayWeather.map(item => {
+      return item.AirAndPollen[2].Category;
+    });
+    const ragweedCategories = this.state.fiveDayWeather.map(item => {
+      return item.AirAndPollen[3].Category;
+    });
+    const treeCategories = this.state.fiveDayWeather.map(item => {
+      return item.AirAndPollen[4].Category;
+    });
+
     //Humidity and pressure values from OpenWeatherMap
     const pressures = this.state.pressureFiveDayWeather.map(item => {
       return item.main.pressure;
@@ -408,7 +421,11 @@ export default class WeatherScreen extends Component {
       grassCounts[0],
       treeCounts[0],
       airQualities[0],
-      uvIndices[0]
+      uvIndices[0],
+      moldCategories[0],
+      ragweedCategories[0],
+      grassCategories[0],
+      treeCategories[0]
     );
 
     const day2 = new Forecast(
@@ -424,7 +441,11 @@ export default class WeatherScreen extends Component {
       grassCounts[1],
       treeCounts[1],
       airQualities[1],
-      uvIndices[1]
+      uvIndices[1],
+      moldCategories[1],
+      ragweedCategories[1],
+      grassCategories[1],
+      treeCategories[1]
     );
     const day3 = new Forecast(
       dates[2],
@@ -439,7 +460,11 @@ export default class WeatherScreen extends Component {
       grassCounts[2],
       treeCounts[2],
       airQualities[2],
-      uvIndices[2]
+      uvIndices[2],
+      moldCategories[2],
+      ragweedCategories[2],
+      grassCategories[2],
+      treeCategories[2]
     );
     const day4 = new Forecast(
       dates[3],
@@ -454,7 +479,11 @@ export default class WeatherScreen extends Component {
       grassCounts[3],
       treeCounts[3],
       airQualities[3],
-      uvIndices[3]
+      uvIndices[3],
+      moldCategories[3],
+      ragweedCategories[3],
+      grassCategories[3],
+      treeCategories[3]
     );
     const day5 = new Forecast(
       dates[4],
@@ -469,7 +498,11 @@ export default class WeatherScreen extends Component {
       grassCounts[4],
       treeCounts[4],
       airQualities[4],
-      uvIndices[4]
+      uvIndices[4],
+      moldCategories[4],
+      ragweedCategories[4],
+      grassCategories[4],
+      treeCategories[4]
     );
     const fiveDay = [today, day2, day3, day4, day5];
 
@@ -551,7 +584,11 @@ export default class WeatherScreen extends Component {
                         fiveDayInfo.grass,
                         fiveDayInfo.tree,
                         fiveDayInfo.aq,
-                        fiveDayInfo.uv
+                        fiveDayInfo.uv,
+                        fiveDayInfo.moldC,
+                        fiveDayInfo.ragweedC,
+                        fiveDayInfo.grassC,
+                        fiveDayInfo.treeC
                       )
                     )
                   }

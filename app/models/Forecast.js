@@ -3,7 +3,7 @@ import { Database } from "./Database";
 //import React, { Component } from "react";
 
 export default class Forecast {
-    constructor(day, type, currTemp, highTemp, lowTemp, pressure, humidity, mold, ragweed, grass, tree, aq, uv) {
+    constructor(day, type, currTemp, highTemp, lowTemp, pressure, humidity, mold, ragweed, grass, tree, aq, uv, moldC, ragweedC, grassC, treeC) {
        this.day = day ? day.toString().substring(5, 10) : ""; 
        this.type = this.typeToIcon(type); 
        this.currTemp = currTemp;
@@ -17,6 +17,11 @@ export default class Forecast {
        this.tree = tree;
        this.aq = aq;
        this.uv = uv;
+       this.moldC = moldC;
+       this.ragweedC = ragweedC;
+       this.grassC = grassC;
+       this.treeC = treeC;
+
 
     }
 

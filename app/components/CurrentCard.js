@@ -149,12 +149,12 @@ export default class CurrentCard extends Component {
 
           <View style={{flexDirection:'row', justifyContent:'space-between'}}>
             <View style={{flexDirection:'row'}}>
-              <Text style={styles.notes}>{this.state.nextForecast.grass}</Text>
+              <Text style={styles.notes}>{this.state.nextForecast.grassC}</Text>
               {icons[2]}
             </View>
             <View style={{flexDirection:'row'}}>
               {icons[5]}
-              <Text style={styles.notes}>{this.state.nextForecast.tree}</Text>
+              <Text style={styles.notes}>{this.state.nextForecast.treeC}</Text>
             </View>
             
           </View>
@@ -168,12 +168,12 @@ export default class CurrentCard extends Component {
 
           <View style={{flexDirection:'row', justifyContent:'space-between'}}>
             <View style={{flexDirection:'row'}}>
-              <Text style={styles.notes}>{this.state.nextForecast.mold}</Text>
+              <Text style={styles.notes}>{this.state.nextForecast.moldC}</Text>
               {icons[3]}
             </View>
             <View style={{flexDirection:'row'}}>
               {icons[4]}
-              <Text style={styles.notes}>{this.state.nextForecast.ragweed}</Text>
+              <Text style={styles.notes}>{this.state.nextForecast.ragweedC}</Text>
             </View>
             
           </View>
